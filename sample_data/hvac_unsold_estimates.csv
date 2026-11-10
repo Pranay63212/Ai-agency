@@ -1,0 +1,16 @@
+customer_name,phone,email,job_type,quote_amount,quote_date,status,notes
+Maria Lopez,(214) 555-0142,maria.lopez@example.com,AC replacement (3 ton),8450,2026-03-14,open,Worried about price; asked about financing
+James Carter,214-555-0187,jcarter@example.com,Furnace repair,1250,2026-01-22,open,
+Priya Shah,(972) 555-0119,priya.shah@example.com,Heat pump install,11200,2026-05-03,open,Wanted to compare with another quote
+Robert King,972.555.0164,rking@example.com,Ductwork replacement,6300,2026-02-10,booked,Booked in March
+Linda Nguyen,(469) 555-0133,linda.n@example.com,AC tune-up + refrigerant recharge,425,2026-06-18,open,
+Maria Lopez,(214) 555-0142,maria.lopez@example.com,AC replacement (3 ton),8450,2026-03-14,open,Duplicate row from CRM export
+Kevin Brooks,555-12,kbrooks@example.com,Thermostat upgrade (smart),390,2026-07-01,open,Phone number looks wrong
+Angela White,(214) 555-0178,,Mini-split install (2 zones),7800,2026-04-25,open,Upstairs bedrooms too hot
+Daniel Reed,(817) 555-0151,dreed@example.com,AC replacement (4 ton),9900,2026-06-02,opted_out,Asked not to be contacted
+Sofia Martinez,(469) 555-0196,sofia.m@example.com,Indoor air quality (UV + filter),1650,2026-08-09,open,Kids have allergies
+Thomas Hill,(972) 555-0124,thill@example.com,Water heater replacement,2400,2025-12-05,open,
+Emily Davis,(817) 555-0109,emily.davis@example.com,Furnace replacement,5600,2025-11-28,open,Said she'd wait until after the holidays
+Marcus Johnson,(214) 555-0115,mjohnson@example.com,AC replacement (3 ton),7950,2026-07-21,open,Unit is 18 years old
+Grace Kim,,grace.kim@example.com,Duct cleaning,550,2026-09-12,open,
+Brian Scott,(469) 555-0182,bscott@example.com,Heat pump repair,980,2026-10-02,open,Quote sent 5 weeks ago
