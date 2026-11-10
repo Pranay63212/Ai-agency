@@ -27,7 +27,7 @@ export ANTHROPIC_API_KEY=sk-ant-...
 python run_demo.py
 ```
 
-Change the NVIDIA model with `NVIDIA_MODEL` (default `meta/llama-3.3-70b-instruct`). Never commit keys.
+Change the NVIDIA model with `NVIDIA_MODEL` (default `nvidia/nemotron-3-ultra-550b-a55b`). Never commit keys.
 
 Outputs:
 - `output/follow_up_messages.csv`: every customer's message sequence

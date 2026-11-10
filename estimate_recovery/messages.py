@@ -12,14 +12,16 @@ import re
 
 MODEL = "claude-opus-5-5"
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
-NVIDIA_MODEL = os.environ.get("NVIDIA_MODEL", "meta/llama-3.3-70b-instruct")
+NVIDIA_MODEL = os.environ.get("NVIDIA_MODEL", "nvidia/nemotron-3-ultra-550b-a55b")
 
 SYSTEM_PROMPT = """You write follow-up messages for a home service contractor reaching out to \
 customers who received a quote but never booked.
 
 Write like the owner or office manager of a local business: warm, plain, short. Reference the \
 customer's actual job and any notes. No pressure tactics, no fake urgency, no discounts unless \
-the business offers one. Never invent facts about the customer or the business.
+the business offers one. Never invent facts about the customer or the business: don't promise \
+financing, warranties, prices, rebates or availability that aren't in the details below. If the \
+customer raised a concern (like price), offer to talk it through instead.
 
 Write three messages:
 1. day_1_text: an SMS under 300 characters that ends with "Reply STOP to opt out."
@@ -114,13 +116,13 @@ def write_with_nvidia(client, contact: dict, business: dict) -> dict:
         + ". No other text."
     )
     last_error = None
-    for _ in range(2):  # one retry if the reply isn't valid JSON
+    for _ in range(3):  # retry if the reply is empty or isn't valid JSON
         response = client.chat.completions.create(
             model=NVIDIA_MODEL,
             messages=[{"role": "system", "content": SYSTEM_PROMPT},
                       {"role": "user", "content": prompt}],
             temperature=0.4,
-            max_tokens=1024,
+            max_tokens=4096,
         )
         try:
             return _parse_json(response.choices[0].message.content or "")
@@ -148,5 +150,10 @@ def write_all(contacts: list[dict], business: dict, provider: str) -> list[dict]
     out = []
     for i, contact in enumerate(contacts, 1):
         print(f"  [{i}/{len(contacts)}] {contact['customer_name']} - {contact['job_type']}")
-        out.append({**contact, **write(contact, business)})
+        try:
+            msgs = write(contact, business)
+        except Exception as e:  # keep going; one bad reply shouldn't stop a 500-row list
+            print(f"    ! AI failed ({e}); using template for this customer")
+            msgs = write_mock(contact, business)
+        out.append({**contact, **msgs})
     return out
