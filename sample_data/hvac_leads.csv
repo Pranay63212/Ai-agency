@@ -1,0 +1,7 @@
+company,owner_name,city,trade,website,review_count,rating,email,notes
+Lone Star Air Pros,Travis Miller,Dallas,HVAC,lonestarairpros.example.com,214,4.8,travis@lonestarairpros.example.com,Family owned since 1998; pushes maintenance plans
+Metroplex Comfort Co,Denise Walker,Plano,HVAC,metroplexcomfort.example.com,86,4.6,info@metroplexcomfort.example.com,Advertises free estimates and financing
+Blue Bonnet Heating & Air,Carlos Ramirez,Garland,HVAC,bluebonnetair.example.com,41,4.9,carlos@bluebonnetair.example.com,Bilingual team; small crew of 6
+Northside Mechanical,Greg Thompson,Richardson,HVAC,northsidemech.example.com,12,4.2,greg@northsidemech.example.com,Very new; few reviews
+Precision Climate Services,Amanda Lee,Frisco,HVAC,precisionclimate.example.com,157,4.7,,Heavy on heat pump installs; no public email
+Arlington Air Masters,Steve Patel,Arlington,HVAC,arlingtonairmasters.example.com,63,4.5,steve@arlingtonairmasters.example.com,Recently expanded to commercial

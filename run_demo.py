@@ -15,7 +15,8 @@ from estimate_recovery.messages import write_all
 from estimate_recovery.report import build_report
 
 OUTPUT_FIELDS = [
-    "customer_name", "phone", "email", "channels", "job_type", "quote_amount", "quote_date",
+    "contact_id", "customer_name", "phone", "email", "channels", "job_type", "quote_amount",
+    "quote_date", "notes",
     "day_1_text", "day_4_email_subject", "day_4_email_body", "day_10_text",
 ]
 

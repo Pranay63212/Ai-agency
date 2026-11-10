@@ -61,6 +61,7 @@ def clean(rows: list[dict]) -> CleanResult:
 
         result.contacts.append({
             **row,
+            "contact_id": phone or email,
             "phone": phone or "",
             "email": email or "",
             "quote_amount": amount,

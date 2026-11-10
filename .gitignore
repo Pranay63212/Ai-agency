@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 output/
 .env
+# Real client data: customer names, phones, emails. Never commit.
+clients/
+.pytest_cache/
