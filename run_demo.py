@@ -1,7 +1,8 @@
 """Run the unsold-estimate recovery demo.
 
     python run_demo.py --mock                      # no API key needed
-    python run_demo.py                             # writes messages with Claude
+    python run_demo.py --provider nvidia           # NVIDIA API (NVIDIA_API_KEY)
+    python run_demo.py                             # Claude (ANTHROPIC_API_KEY)
     python run_demo.py --input client.csv --business "Cool Air HVAC" --sender Mike --phone "(214) 555-0100"
 """
 
@@ -28,8 +29,12 @@ def main() -> None:
     p.add_argument("--sender", default="Mike")
     p.add_argument("--phone", default="(214) 555-0100")
     p.add_argument("--close-rate", type=float, default=0.08, help="share of contacts expected to book")
-    p.add_argument("--mock", action="store_true", help="use template messages instead of Claude")
+    p.add_argument("--provider", choices=["claude", "nvidia", "mock"], default="claude",
+                   help="which AI writes the messages")
+    p.add_argument("--mock", action="store_true", help="shortcut for --provider mock")
     args = p.parse_args()
+    if args.mock:
+        args.provider = "mock"
 
     business = {"name": args.business, "trade": args.trade, "sender": args.sender, "phone": args.phone}
     os.makedirs(args.out_dir, exist_ok=True)
@@ -39,7 +44,7 @@ def main() -> None:
     print(f"Loaded {len(rows)} estimates: {len(cleaned.contacts)} ready, {len(cleaned.removed)} removed.")
 
     print("Writing follow-up messages...")
-    contacts = write_all(cleaned.contacts, business, mock=args.mock)
+    contacts = write_all(cleaned.contacts, business, provider=args.provider)
 
     csv_path = os.path.join(args.out_dir, "follow_up_messages.csv")
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
@@ -49,7 +54,7 @@ def main() -> None:
 
     report_path = os.path.join(args.out_dir, "report.html")
     with open(report_path, "w", encoding="utf-8") as f:
-        f.write(build_report(contacts, cleaned.removed, business, args.close_rate, args.mock))
+        f.write(build_report(contacts, cleaned.removed, business, args.close_rate, args.provider))
 
     print(f"Done.\n  Messages: {csv_path}\n  Report:   {report_path}")
 

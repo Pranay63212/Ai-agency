@@ -1,10 +1,18 @@
-"""Write a personalized follow-up sequence for each unsold estimate, using Claude."""
+"""Write a personalized follow-up sequence for each unsold estimate with an AI model.
+
+Providers:
+  claude  - Anthropic API (needs ANTHROPIC_API_KEY)
+  nvidia  - NVIDIA API catalog, OpenAI-compatible (needs NVIDIA_API_KEY)
+  mock    - fixed templates, no key needed
+"""
 
 import json
-
-import anthropic
+import os
+import re
 
 MODEL = "claude-opus-5-5"
+NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
+NVIDIA_MODEL = os.environ.get("NVIDIA_MODEL", "meta/llama-3.3-70b-instruct")
 
 SYSTEM_PROMPT = """You write follow-up messages for a home service contractor reaching out to \
 customers who received a quote but never booked.
@@ -49,7 +57,7 @@ def _describe(contact: dict, business: dict) -> str:
     )
 
 
-def write_with_claude(client: anthropic.Anthropic, contact: dict, business: dict) -> dict:
+def write_with_claude(client, contact: dict, business: dict) -> dict:
     response = client.beta.messages.create(
         model=MODEL,
         max_tokens=16000,
@@ -86,11 +94,59 @@ def write_mock(contact: dict, business: dict) -> dict:
     }
 
 
-def write_all(contacts: list[dict], business: dict, mock: bool) -> list[dict]:
-    client = None if mock else anthropic.Anthropic()
+def _parse_json(text: str) -> dict:
+    """Pull the JSON object out of a reply that may wrap it in prose or code fences."""
+    match = re.search(r"\{.*\}", text, re.DOTALL)
+    if not match:
+        raise ValueError(f"No JSON in model reply: {text[:200]}")
+    data = json.loads(match.group(0))
+    missing = [k for k in SCHEMA["required"] if not isinstance(data.get(k), str)]
+    if missing:
+        raise ValueError(f"Model reply missing fields: {missing}")
+    return {k: data[k] for k in SCHEMA["required"]}
+
+
+def write_with_nvidia(client, contact: dict, business: dict) -> dict:
+    prompt = (
+        _describe(contact, business)
+        + "\n\nReturn only a JSON object with these string fields: "
+        + ", ".join(SCHEMA["required"])
+        + ". No other text."
+    )
+    last_error = None
+    for _ in range(2):  # one retry if the reply isn't valid JSON
+        response = client.chat.completions.create(
+            model=NVIDIA_MODEL,
+            messages=[{"role": "system", "content": SYSTEM_PROMPT},
+                      {"role": "user", "content": prompt}],
+            temperature=0.4,
+            max_tokens=1024,
+        )
+        try:
+            return _parse_json(response.choices[0].message.content or "")
+        except ValueError as e:
+            last_error = e
+    raise RuntimeError(f"{contact['customer_name']}: {last_error}")
+
+
+def make_writer(provider: str):
+    if provider == "mock":
+        return write_mock
+    if provider == "claude":
+        import anthropic
+        client = anthropic.Anthropic()
+        return lambda c, b: write_with_claude(client, c, b)
+    if provider == "nvidia":
+        from openai import OpenAI
+        client = OpenAI(base_url=NVIDIA_BASE_URL, api_key=os.environ.get("NVIDIA_API_KEY", "set-by-proxy"))
+        return lambda c, b: write_with_nvidia(client, c, b)
+    raise ValueError(f"Unknown provider: {provider}")
+
+
+def write_all(contacts: list[dict], business: dict, provider: str) -> list[dict]:
+    write = make_writer(provider)
     out = []
     for i, contact in enumerate(contacts, 1):
         print(f"  [{i}/{len(contacts)}] {contact['customer_name']} - {contact['job_type']}")
-        msgs = write_mock(contact, business) if mock else write_with_claude(client, contact, business)
-        out.append({**contact, **msgs})
+        out.append({**contact, **write(contact, business)})
     return out

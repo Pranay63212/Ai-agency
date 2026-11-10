@@ -18,10 +18,16 @@ pip install -r requirements.txt
 # No API key needed: template messages
 python run_demo.py --mock
 
-# Real AI messages: needs an Anthropic API key
+# AI messages with NVIDIA (free key at build.nvidia.com)
+export NVIDIA_API_KEY=nvapi-...
+python run_demo.py --provider nvidia
+
+# AI messages with Claude
 export ANTHROPIC_API_KEY=sk-ant-...
 python run_demo.py
 ```
+
+Change the NVIDIA model with `NVIDIA_MODEL` (default `meta/llama-3.3-70b-instruct`). Never commit keys.
 
 Outputs:
 - `output/follow_up_messages.csv`: every customer's message sequence
@@ -42,7 +48,7 @@ The CSV needs these columns: `customer_name, phone, email, job_type, quote_amoun
 |---|---|
 | `run_demo.py` | Command line entry point |
 | `estimate_recovery/clean.py` | List cleaning |
-| `estimate_recovery/messages.py` | Claude prompt and message writing (plus mock mode) |
+| `estimate_recovery/messages.py` | Prompt and message writing (Claude, NVIDIA or mock) |
 | `estimate_recovery/report.py` | HTML client report |
 | `sample_data/` | Fake HVAC estimates for demos |
 

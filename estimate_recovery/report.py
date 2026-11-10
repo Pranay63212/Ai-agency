@@ -9,7 +9,7 @@ def _money(x: float) -> str:
 
 
 def build_report(contacts: list[dict], removed: list[tuple[dict, str]], business: dict,
-                 close_rate: float, mock: bool) -> str:
+                 close_rate: float, provider: str) -> str:
     pipeline = sum(c["quote_amount"] for c in contacts)
     expected = pipeline * close_rate
     expected_jobs = max(1, round(len(contacts) * close_rate)) if contacts else 0
@@ -24,7 +24,8 @@ def build_report(contacts: list[dict], removed: list[tuple[dict, str]], business
         f"<li>{html.escape(r.get('customer_name') or '(no name)')}: {html.escape(why)}</li>"
         for r, why in removed
     ) or "<li>None</li>"
-    mode = "Demo mode: template messages (no AI)." if mock else "Messages written by Claude."
+    mode = {"mock": "Demo mode: template messages (no AI).", "claude": "Messages written by Claude.",
+            "nvidia": "Messages written by AI."}.get(provider, "")
 
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
