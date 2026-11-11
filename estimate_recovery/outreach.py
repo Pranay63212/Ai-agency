@@ -2,6 +2,7 @@
 
 import csv
 import re
+import time
 
 from .llm import chat_json
 
@@ -121,25 +122,35 @@ def tidy(text: str) -> str:
     return re.sub(r"(^|[.!?]\s+|\n\s*)([a-z])", lambda m: m.group(1) + m.group(2).upper(), text)
 
 
-def write_outreach(leads: list[dict], me: dict, provider: str) -> list[dict]:
+def write_outreach(leads: list[dict], me: dict, provider: str,
+                   existing: dict[str, dict] | None = None) -> list[dict]:
+    """existing: rows from an earlier run, keyed by company. AI-written ones are kept as they are."""
     out = []
     for i, lead in enumerate(leads, 1):
         print(f"  [{i}/{len(leads)}] {lead['company']}")
+        prev = (existing or {}).get(lead["company"])
+        if prev and prev.get("source") == "ai" and all(prev.get(k) for k in FIELDS):
+            out.append({**lead, **{k: prev[k] for k in FIELDS}, "source": "ai"})
+            continue
+        source = "template"
         if provider == "mock":
             msgs = template(lead, me)
         else:
             msgs = None
-            for attempt in range(2):  # one retry on server errors
+            for attempt in range(4):  # the NVIDIA service sometimes returns empty or 5xx replies
                 try:
                     data = chat_json(provider, SYSTEM_PROMPT, _describe(lead, me), FIELDS)
                     msgs = {k: tidy(str(data[k]).strip()) if k != "subject" else str(data[k]).strip()
                             for k in FIELDS}
+                    source = "ai"
                     break
                 except Exception as e:
-                    if attempt:
+                    if attempt == 3:
                         print(f"    ! AI failed ({e}); using template")
+                    else:
+                        time.sleep(3 * (attempt + 1))
             msgs = msgs or template(lead, me)
-        out.append({**lead, **msgs})
+        out.append({**lead, **msgs, "source": source})
     return out
 
 

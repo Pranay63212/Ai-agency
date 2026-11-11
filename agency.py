@@ -166,10 +166,17 @@ def cmd_outreach(a):
     from estimate_recovery.outreach import FIELDS, load_leads, to_markdown, write_outreach
     leads, skipped = load_leads(a.leads)
     print(f"{len(leads)} leads to contact, {len(skipped)} skipped (under 20 reviews).")
-    rows = write_outreach(leads, {"name": a.name, "agency": a.agency}, a.provider)
+    existing = {}
+    if os.path.exists(a.out) and not a.redo:
+        with open(a.out, newline="", encoding="utf-8") as f:
+            existing = {r["company"]: r for r in csv.DictReader(f)}
+    rows = write_outreach(leads, {"name": a.name, "agency": a.agency}, a.provider, existing)
+    redo = sum(r["source"] != "ai" for r in rows)
+    if redo and a.provider != "mock":
+        print(f"{redo} lead(s) used the backup template. Run the same command again to retry just those.")
     os.makedirs(os.path.dirname(a.out) or ".", exist_ok=True)
     with open(a.out, "w", newline="", encoding="utf-8") as f:
-        fields = list(leads[0].keys()) + FIELDS if leads else FIELDS
+        fields = (list(leads[0].keys()) if leads else []) + FIELDS + ["source"]
         w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         w.writeheader()
         w.writerows(rows)
@@ -256,6 +263,7 @@ def main():
     o.add_argument("--name", required=True, help="your name")
     o.add_argument("--agency", required=True, help="your agency name")
     o.add_argument("--out", default="output/outreach.csv")
+    o.add_argument("--redo", action="store_true", help="rewrite every lead, not just ones that fell back to templates")
     o.set_defaults(func=cmd_outreach)
 
     a = p.parse_args()
