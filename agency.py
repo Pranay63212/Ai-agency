@@ -163,7 +163,7 @@ def cmd_serve(a):
 
 
 def cmd_outreach(a):
-    from estimate_recovery.outreach import FIELDS, load_leads, write_outreach
+    from estimate_recovery.outreach import FIELDS, load_leads, to_markdown, write_outreach
     leads, skipped = load_leads(a.leads)
     print(f"{len(leads)} leads to contact, {len(skipped)} skipped (under 20 reviews).")
     rows = write_outreach(leads, {"name": a.name, "agency": a.agency}, a.provider)
@@ -173,7 +173,10 @@ def cmd_outreach(a):
         w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         w.writeheader()
         w.writerows(rows)
-    print(f"Saved: {a.out}")
+    md = os.path.splitext(a.out)[0] + ".md"
+    with open(md, "w", encoding="utf-8") as f:
+        f.write(to_markdown(rows))
+    print(f"Saved: {a.out}\n       {md} (easy to read)")
 
 
 def main():

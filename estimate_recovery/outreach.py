@@ -5,7 +5,8 @@ import re
 
 from .llm import chat_json
 
-FIELDS = ["subject", "first_touch", "video_script", "day_3_followup", "day_7_tip", "day_14_breakup"]
+FIELDS = ["subject", "first_touch", "facebook_message", "linkedin_note", "call_script",
+          "video_script", "day_3_followup", "day_7_tip", "day_14_breakup"]
 MIN_REVIEWS = 20  # fewer reviews usually means too few quotes to be worth a pilot
 
 SYSTEM_PROMPT = """You write cold outreach for a one-person agency that recovers unsold \
@@ -22,7 +23,13 @@ write a [placeholder] in brackets. No hype words ("revolutionary", "game-changer
 
 Write:
 - subject: email subject under 8 words, lowercase is fine
-- first_touch: email/DM under 70 words ending with a low-effort yes/no question
+- first_touch: email or website contact form message, under 70 words, ending with a \
+low-effort yes/no question
+- facebook_message: Facebook page message, under 45 words, casual, ending with a yes/no question
+- linkedin_note: LinkedIn connection request note, under 280 characters, no hard pitch
+- call_script: a short phone script. Goal: get the name and email of whoever handles \
+estimates, not to sell. Include what to say to whoever answers, and a 2-sentence version if \
+the owner picks up. Use line breaks between parts.
 - video_script: a 60-second screen-recording script (what to say while showing their website \
 and a sample follow-up message written for their business)
 - day_3_followup: under 40 words, mentions a short video
@@ -59,22 +66,41 @@ def _describe(lead: dict, me: dict) -> str:
     )
 
 
+def greeting(lead: dict) -> str:
+    name = (lead.get("owner_name") or "").split()
+    return f"Hi {name[0]}" if name else f"Hi {lead['company']} team"
+
+
 def template(lead: dict, me: dict) -> dict:
-    first = (lead.get("owner_name") or "").split()[0] if lead.get("owner_name") else "there"
-    co = lead["company"]
+    hi, co = greeting(lead), lead["company"]
+    first = hi[3:]
     return {
         "subject": "old quotes at " + co.lower(),
         "first_touch": (
-            f"Hey {first}, quick question: how many estimates did {co} send last year that never "
+            f"{hi}, quick question: how many estimates did {co} send last year that never "
             f"got a yes? I set up AI follow-up that re-contacts those customers and books jobs. "
             f"Happy to run it free on 100 of your old quotes. If nothing books, you owe nothing. "
             f"Worth a look?"
         ),
+        "facebook_message": (
+            f"{hi}! Quick one: do you have old quotes that never got a yes? I follow up on them "
+            f"with AI and book the jobs. Free on 100 old quotes, you only pay if jobs book. Interested?"
+        ),
+        "linkedin_note": (
+            f"{hi}, I help home service companies win back quotes that went silent, using AI "
+            f"follow-up. Would love to connect."
+        ),
+        "call_script": (
+            f"To whoever answers: \"Hi, quick question, who handles your estimates there? "
+            f"And what's the best email to reach them?\"\n\n"
+            f"If the owner answers: \"I help {lead.get('trade') or 'contractors'} companies win back "
+            f"quotes that went silent. I'd run it free on 100 of your old estimates. Can I email "
+            f"you the details?\""
+        ),
         "video_script": (
-            f"Hi {first}, I'm {me['name']}. I'm on the {co} website now. Most HVAC shops send a "
+            f"Hi {first}, I'm {me['name']}. I'm on the {co} website now. Most contractors send a "
             f"quote, follow up once, and move on. Here's what a follow-up from {co} would look "
-            f"like for a customer who got an AC replacement quote and went quiet: [show sample "
-            f"text]. My system sends a short sequence like this to every old quote, answers "
+            f"like for a customer whose quote went quiet: [show sample text]. My system sends a short sequence like this to every old quote, answers "
             f"replies and books interested customers on your calendar. I'll run it free on 100 "
             f"old estimates. Reply if you want to see it on your own list."
         ),
@@ -102,12 +128,38 @@ def write_outreach(leads: list[dict], me: dict, provider: str) -> list[dict]:
         if provider == "mock":
             msgs = template(lead, me)
         else:
-            try:
-                data = chat_json(provider, SYSTEM_PROMPT, _describe(lead, me), FIELDS)
-                msgs = {k: tidy(str(data[k]).strip()) if k != "subject" else str(data[k]).strip()
-                        for k in FIELDS}
-            except Exception as e:
-                print(f"    ! AI failed ({e}); using template")
-                msgs = template(lead, me)
+            msgs = None
+            for attempt in range(2):  # one retry on server errors
+                try:
+                    data = chat_json(provider, SYSTEM_PROMPT, _describe(lead, me), FIELDS)
+                    msgs = {k: tidy(str(data[k]).strip()) if k != "subject" else str(data[k]).strip()
+                            for k in FIELDS}
+                    break
+                except Exception as e:
+                    if attempt:
+                        print(f"    ! AI failed ({e}); using template")
+            msgs = msgs or template(lead, me)
         out.append({**lead, **msgs})
     return out
+
+
+def to_markdown(rows: list[dict]) -> str:
+    """One readable sheet: every company with each message ready to copy."""
+    parts = ["# Outreach messages", "",
+             "Each company has a version for every channel. Pick the channel you can reach them on, "
+             "fill in any [placeholders], and send. Follow up on day 3, 7 and 14 if they don't reply.", ""]
+    for i, r in enumerate(rows, 1):
+        meta = " · ".join(x for x in (r.get("trade"), f"{r['review_count']} reviews" if r.get("review_count") else "",
+                                     r.get("phone"), r.get("email")) if x)
+        parts += [f"## {i}. {r['company']}", f"*{meta}*", "",
+                  "### Email / website contact form", f"**Subject:** {r['subject']}", "", r["first_touch"], "",
+                  "### Facebook message", r["facebook_message"], "",
+                  "### LinkedIn connection note", r["linkedin_note"], "",
+                  "### Phone script (to get a name and email)", r["call_script"], "",
+                  "### Follow-ups",
+                  f"- **Day 3:** {r['day_3_followup']}",
+                  f"- **Day 7:** {r['day_7_tip']}",
+                  f"- **Day 14:** {r['day_14_breakup']}", "",
+                  "<details><summary>60-second video script</summary>", "", r["video_script"], "", "</details>",
+                  "", "---", ""]
+    return "\n".join(parts)
