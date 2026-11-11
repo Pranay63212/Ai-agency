@@ -215,29 +215,30 @@ Hi, I was on [website] and noticed E-Trade has 142 Google reviews — solid repu
 *HVAC · 105 reviews · 847-253-0866*
 
 ### Email / website contact form
-**Subject:** old quotes at ibbotson heating co
+**Subject:** follow up on unsold hvac quotes
 
-Hi Ibbotson Heating Co team, quick question: how many estimates did Ibbotson Heating Co send last year that never got a yes? I set up AI follow-up that re-contacts those customers and books jobs. Happy to run it free on 100 of your old quotes. If nothing books, you owe nothing. Worth a look?
+Hi Ibbotson Heating Co team,
+Your old estimates that went silent are costing you jobs. We run AI follow‑up on those quotes for free for 14 days on up to 100 estimates. Would you be open to a free 14‑day pilot on up to 100 old quotes?
 
 ### Facebook message
-Hi Ibbotson Heating Co team! Quick one: do you have old quotes that never got a yes? I follow up on them with AI and book the jobs. Free on 100 old quotes, you only pay if jobs book. Interested?
+Hi Ibbotson Heating Co team, Noticed you’ve got 105 reviews but many old quotes go quiet. We can follow up automatically for free for two weeks. Interested?
 
 ### LinkedIn connection note
-Hi Ibbotson Heating Co team, I help home service companies win back quotes that went silent, using AI follow-up. Would love to connect.
+Hi, I help HVAC contractors recover unsold estimates with AI follow‑up. Saw Ibbotson Heating Co has strong reviews — thought you might want a free 14‑day test on up to 100 old quotes. Happy to share how it works.
 
 ### Phone script (to get a name and email)
-To whoever answers: "Hi, quick question, who handles your estimates there? And what's the best email to reach them?"
+Gatekeeper: Hi, this is [Your name] from [Your agency]. I’m looking for the person who handles your old estimates — could you point me to their name and email? Thanks.
 
-If the owner answers: "I help HVAC companies win back quotes that went silent. I'd run it free on 100 of your old estimates. Can I email you the details?"
+Owner (if they answer): Hi, I’m [Your name] with [Your agency]. We run a free AI follow‑up on unsold HVAC quotes for 14 days. Can I send you a quick overview?
 
 ### Follow-ups
-- **Day 3:** Hi Ibbotson Heating Co team, I recorded a 60-second video showing what this would look like for Ibbotson Heating Co. Want me to send it?
-- **Day 7:** Hi Ibbotson Heating Co team, one quick tip: quotes followed up within 48 hours and again at 7 days close noticeably more often than quotes followed up once. Even a short text works. If you'd rather not do it by hand, that's what I do.
-- **Day 14:** Hi Ibbotson Heating Co team, I haven't heard back, so I'll assume the timing's off. Should I close your file? Happy to reconnect anytime.
+- **Day 3:** Hi, just sent a 60‑second video showing how the AI follow‑up would look on your estimates. Worth a quick watch?
+- **Day 7:** Send a brief text 48 hours after the quote with a specific question about the project — it nudges the homeowner to reply. Let me know if you’d like help automating that.
+- **Day 14:** Hi, haven’t heard back — should I close your file on the free pilot? No pressure either way.
 
 <details><summary>60-second video script</summary>
 
-Hi Ibbotson Heating Co team, I'm [Your name]. I'm on the Ibbotson Heating Co website now. Most contractors send a quote, follow up once, and move on. Here's what a follow-up from Ibbotson Heating Co would look like for a customer whose quote went quiet: [show sample text]. My system sends a short sequence like this to every old quote, answers replies and books interested customers on your calendar. I'll run it free on 100 old estimates. Reply if you want to see it on your own list.
+Hi, I’m [Your name] from [Your agency]. I’m on your site [website] right now. I’ve drafted a sample follow‑up message tailored to Ibbotson Heating Co — something like: ‘Hi [Homeowner], just checking in on the HVAC quote we sent last week. Any questions I can answer?’ The AI would send this automatically at the right intervals, track replies, and book calls. Interested in seeing it run on up to 100 of your old estimates for free?
 
 </details>
 
@@ -637,29 +638,34 @@ Hi, I was on Design & Precision's site — great reviews, clean portfolio. I not
 *HVAC · 61 reviews · 847-359-4500*
 
 ### Email / website contact form
-**Subject:** old quotes at allied air conditioning & heating
+**Subject:** old quotes going silent
 
-Hi Allied Air Conditioning & Heating team, quick question: how many estimates did Allied Air Conditioning & Heating send last year that never got a yes? I set up AI follow-up that re-contacts those customers and books jobs. Happy to run it free on 100 of your old quotes. If nothing books, you owe nothing. Worth a look?
+Hi Allied Air Conditioning & Heating team,
+
+You've got estimates that went quiet after the quote. We run AI follow-up on those old unsold jobs — free pilot on up to 100 estimates over 14 days. You only pay for jobs that actually book after that.
+
+Worth a quick look?
 
 ### Facebook message
-Hi Allied Air Conditioning & Heating team! Quick one: do you have old quotes that never got a yes? I follow up on them with AI and book the jobs. Free on 100 old quotes, you only pay if jobs book. Interested?
+Hi, saw you're in the north suburbs. Lots of HVAC quotes go silent after the estimate. We follow up on those old ones free for 14 days — pay only for booked jobs. Interested?
 
 ### LinkedIn connection note
-Hi Allied Air Conditioning & Heating team, I help home service companies win back quotes that went silent, using AI follow-up. Would love to connect.
+Hi, I help HVAC contractors recover unsold estimates with AI follow-up. Free 14-day pilot, pay only for booked jobs. No pitch — just thought it might fit Allied Air.
 
 ### Phone script (to get a name and email)
-To whoever answers: "Hi, quick question, who handles your estimates there? And what's the best email to reach them?"
+Hi, I'm calling for the person who handles your old estimates and follow-up. Could you point me to the right name and email?
 
-If the owner answers: "I help HVAC companies win back quotes that went silent. I'd run it free on 100 of your old estimates. Can I email you the details?"
+---
+If owner picks up: Hi, I help HVAC companies follow up on quotes that went silent. Free 14-day pilot on up to 100 old estimates, pay only for jobs that book. Who should I send the details to?
 
 ### Follow-ups
-- **Day 3:** Hi Allied Air Conditioning & Heating team, I recorded a 60-second video showing what this would look like for Allied Air Conditioning & Heating. Want me to send it?
-- **Day 7:** Hi Allied Air Conditioning & Heating team, one quick tip: quotes followed up within 48 hours and again at 7 days close noticeably more often than quotes followed up once. Even a short text works. If you'd rather not do it by hand, that's what I do.
-- **Day 14:** Hi Allied Air Conditioning & Heating team, I haven't heard back, so I'll assume the timing's off. Should I close your file? Happy to reconnect anytime.
+- **Day 3:** Hi, sent a short video showing how the follow-up would look for Allied Air. Worth 60 seconds?
+- **Day 7:** One tip: follow up within 48 hours of sending a quote, then again at day 7 and day 14. Most jobs close on the third touch. Happy to show how we automate this.
+- **Day 14:** Hi, haven't heard back — should I close your file for now?
 
 <details><summary>60-second video script</summary>
 
-Hi Allied Air Conditioning & Heating team, I'm [Your name]. I'm on the Allied Air Conditioning & Heating website now. Most contractors send a quote, follow up once, and move on. Here's what a follow-up from Allied Air Conditioning & Heating would look like for a customer whose quote went quiet: [show sample text]. My system sends a short sequence like this to every old quote, answers replies and books interested customers on your calendar. I'll run it free on 100 old estimates. Reply if you want to see it on your own list.
+Hi, I was on Allied Air Conditioning's site and noticed you serve the Chicago north suburbs. Most HVAC companies have estimates that never close — people get busy, compare prices, or just forget. I recorded a quick sample follow-up written for your business: 'Hi [customer], just checking in on the quote for your [system type] from [date]. Still thinking it over? Happy to answer any questions.' Our AI sends these automatically across your old pipeline. Free 14-day test on up to 100 estimates. Want me to set it up?
 
 </details>
 
