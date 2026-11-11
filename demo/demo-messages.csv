@@ -1,0 +1,57 @@
+contact_id,customer_name,phone,email,channels,job_type,quote_amount,quote_date,notes,day_1_text,day_4_email_subject,day_4_email_body,day_10_text
++12145550142,Maria Lopez,+12145550142,maria.lopez@example.com,"text, email",AC replacement (3 ton),8450.0,2026-03-14,Worried about price; asked about financing,"Hi Maria, this is Mike from Comfort Pro HVAC. Following up on your 3‑ton AC replacement quote. I know price was a concern and you asked about financing — happy to talk through any questions. Let me know if you'd like to chat. Reply STOP to opt out.",Following up on your AC replacement quote,"Hi Maria, just checking in on the 3‑ton AC replacement quote from March 14. I remember you were concerned about the price and had questions about financing. No pressure — just wanted you to know I'm here if you'd like to discuss options or have any other questions. Feel free to call or reply to this email. Thanks, Mike","Hi Maria, Mike from Comfort Pro HVAC. Still thinking about the AC replacement? No worries either way — just let me know if you'd like help moving forward. Reply STOP to opt out."
++12145550187,James Carter,+12145550187,jcarter@example.com,"text, email",Furnace repair,1250.0,2026-01-22,,"Hi James, this is Mike from Comfort Pro HVAC. Just following up on the furnace repair quote from 1/22. Let me know if you have any questions. Reply STOP to opt out.",Follow-up on your furnace repair quote,"Hi James,
+
+I wanted to check in on the furnace repair quote we sent on January 22. If you have any questions or would like to schedule, just let me know. I'm happy to walk through the details or adjust anything.
+
+Thanks,
+Mike
+Comfort Pro HVAC
+(214) 555-0100","Hi James, Mike from Comfort Pro HVAC. Still interested in the furnace repair? No pressure—just let me know if you'd like to move forward or have questions. Reply STOP to opt out."
++19725550119,Priya Shah,+19725550119,priya.shah@example.com,"text, email",Heat pump install,11200.0,2026-05-03,Wanted to compare with another quote,"Hi Priya, this is Mike from Comfort Pro HVAC. Thanks for letting us quote your heat pump install on 5/3. Let me know if you have any questions while you compare. Reply STOP to opt out.",Following up on your heat pump quote,"Hi Priya,
+
+Just checking in on the heat pump install quote from May 3. I know you’re comparing options, and I’m happy to walk through any details or answer questions you have. No pressure—just want to make sure you have everything you need.
+
+Feel free to reply to this email or call me at (214) 555-0100.
+
+Thanks,
+Mike
+Comfort Pro HVAC","Hi Priya, Mike from Comfort Pro HVAC. Still thinking about the heat pump install? Let me know if you’d like any more info or want to move forward. Reply STOP to opt out."
++14695550133,Linda Nguyen,+14695550133,linda.n@example.com,"text, email",AC tune-up + refrigerant recharge,425.0,2026-06-18,,"Hi Linda, this is Mike from Comfort Pro HVAC. Just checking in on the AC tune‑up & refrigerant recharge quote from 6/18. Let me know if you have any questions. Reply STOP to opt out.",Follow‑up on your AC tune‑up quote,"Hi Linda,
+
+I wanted to follow up on the AC tune‑up and refrigerant recharge quote I sent on June 18. If you’d like to schedule, have questions, or need any adjustments, just let me know — I’m happy to help.
+
+Thanks,
+Mike
+Comfort Pro HVAC
+(214) 555-0100","Hi Linda, still thinking about the AC tune‑up & recharge? No pressure — just let me know if you’d like to move forward or have any questions. Reply STOP to opt out."
+kbrooks@example.com,Kevin Brooks,,kbrooks@example.com,email,Thermostat upgrade (smart),390.0,2026-07-01,Phone number looks wrong,"Hi Kevin, this is Mike from Comfort Pro HVAC. We sent a quote for your smart thermostat upgrade ($390) on 7/1. Looks like the phone number we have may be off—just wanted to make sure you got it. Let me know if you have questions. Reply STOP to opt out.",Follow‑up on your smart thermostat quote,"Hi Kevin, just checking in on the smart thermostat upgrade quote we sent July 1 for $390. I noticed the phone number we have might not be current, so I wanted to make sure you received it. If you have any questions or want to schedule, just reply to this email or call me at (214) 555‑0100. No pressure—happy to help whenever you’re ready. Thanks, Mike","Hey Kevin, still thinking about the smart thermostat upgrade? Let me know if you’d like to move forward or have any questions. Reply STOP to opt out."
++12145550178,Angela White,+12145550178,,text,Mini-split install (2 zones),7800.0,2026-04-25,Upstairs bedrooms too hot,"Hi Angela, this is Mike from Comfort Pro HVAC. Just checking in on the mini‑split quote for your upstairs bedrooms. Let me know if you have any questions. Reply STOP to opt out.",Follow‑up on your mini‑split quote,"Hi Angela, Mike here. Wanted to see if you had any thoughts on the 2‑zone mini‑split for the upstairs bedrooms. Happy to walk through the details or adjust anything. Just let me know a good time to chat. Thanks, Mike","Hi Angela, still thinking about the mini‑split for the upstairs? I’m here if you’d like to move forward or have more questions. No pressure. Reply STOP to opt out."
++14695550196,Sofia Martinez,+14695550196,sofia.m@example.com,"text, email",Indoor air quality (UV + filter),1650.0,2026-08-09,Kids have allergies,"Hi Sofia, this is Mike from Comfort Pro HVAC. Just checking in on the indoor air quality quote (UV light + filter) for your kids' allergies. Let me know if you have any questions. Reply STOP to opt out.",Following up on your indoor air quality quote,"Hi Sofia, I wanted to follow up on the UV light and filter system we quoted for your home. Since your kids have allergies, I know clean air is a priority. If you have any questions or want to discuss options, just let me know — I'm happy to help. Thanks, Mike, Comfort Pro HVAC (214) 555-0100","Hi Sofia, still thinking about the UV + filter system for your kids' allergies? No pressure — just let me know if you'd like to move forward or have questions. Reply STOP to opt out."
++19725550124,Thomas Hill,+19725550124,thill@example.com,"text, email",Water heater replacement,2400.0,2025-12-05,,"Hi Thomas, this is Mike from Comfort Pro HVAC. Just following up on your water heater replacement quote for $2,400. Let me know if you have any questions or want to schedule. Reply STOP to opt out.",Your water heater replacement quote from Comfort Pro HVAC,"Hi Thomas, Mike here. Wanted to check in on the water heater replacement quote we sent over. No pressure — just here if you have questions or want to get it on the calendar. Let me know what works for you. Thanks, Mike","Hi Thomas, Mike from Comfort Pro HVAC. Still thinking about that water heater replacement? Happy to answer any questions or set up a time if you're ready. Reply STOP to opt out."
++18175550109,Emily Davis,+18175550109,emily.davis@example.com,"text, email",Furnace replacement,5600.0,2025-11-28,Said she'd wait until after the holidays,"Hi Emily, this is Mike from Comfort Pro HVAC. Thanks for letting us quote your furnace replacement. You mentioned waiting until after the holidays — just wanted you to know we're here when you're ready. Reply STOP to opt out.",Following up on your furnace replacement quote,"Hi Emily,
+
+Just checking in on the furnace replacement quote from last week. I know you said you'd wait until after the holidays, so no pressure — just wanted you to have my direct line if any questions come up.
+
+If you'd like to schedule or talk through options, give me a call at (214) 555-0100.
+
+Thanks,
+Mike
+Comfort Pro HVAC","Hi Emily, Mike from Comfort Pro HVAC. The holidays are behind us — just wondering if you'd still like help with the furnace replacement? Happy to answer any questions. Reply STOP to opt out."
++12145550115,Marcus Johnson,+12145550115,mjohnson@example.com,"text, email",AC replacement (3 ton),7950.0,2026-07-21,Unit is 18 years old,"Hi Marcus, this is Mike from Comfort Pro HVAC. Just following up on the 3‑ton AC replacement quote for your 18‑year‑old unit. Let me know if you have any questions. Reply STOP to opt out.",Your AC replacement quote from Comfort Pro HVAC,"Hi Marcus, Mike here. Wanted to check in on the 3‑ton AC replacement quote we sent for your 18‑year‑old system. No pressure — just here if you’d like to discuss options, timing, or any concerns. Feel free to call or reply to this email. Thanks, Mike (214) 555‑0100","Hi Marcus, Mike from Comfort Pro HVAC. Still thinking about the AC replacement? Happy to answer any questions or schedule when you’re ready. Reply STOP to opt out."
+grace.kim@example.com,Grace Kim,,grace.kim@example.com,email,Duct cleaning,550.0,2026-09-12,,"Hi Grace, this is Mike from Comfort Pro HVAC. Just checking in on the duct cleaning quote from 9/12. Let me know if you have any questions. Reply STOP to opt out.",Following up on your duct cleaning quote,"Hi Grace,
+
+I wanted to make sure you received our quote for duct cleaning on September 12. If you have any questions or would like to schedule, just let me know. I'm happy to walk through the details.
+
+Thanks,
+Mike
+Comfort Pro HVAC
+(214) 555-0100","Hi Grace, this is Mike from Comfort Pro HVAC. Still thinking about the duct cleaning? Let me know if you'd like to move forward or have questions. Reply STOP to opt out."
++14695550182,Brian Scott,+14695550182,bscott@example.com,"text, email",Heat pump repair,980.0,2026-10-02,Quote sent 5 weeks ago,"Hi Brian, this is Mike from Comfort Pro HVAC. Just checking in on the heat pump repair quote from Oct 2. Let me know if you have any questions or want to schedule. Reply STOP to opt out.",Following up on your heat pump repair quote,"Hi Brian,
+
+I wanted to touch base about the heat pump repair quote we sent on October 2. If you have any questions, need more details, or would like to set up a time for the work, just let me know. I'm happy to help.
+
+Thanks,
+Mike
+Comfort Pro HVAC
+(214) 555-0100","Hi Brian, still here if you need help with the heat pump repair. No pressure—just let me know. Reply STOP to opt out."
