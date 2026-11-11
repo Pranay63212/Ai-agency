@@ -57,7 +57,11 @@ python agency.py report their-company     # Friday report + invoice
 
 ## Good habits
 
-- **Send as the business.** In `.env`, set `SMTP_FROM` to "Owner Name at Their Company <your@gmail.com>". Even better: ask the client to make an app password on *their* email, so messages come from an address customers recognize.
+- **Which email sends?** By default every client uses your Gmail from `.env`, shown as "<Owner> at <Their Company>". Better: ask the client to create a Gmail just for this (like `quotes.theircompany@gmail.com`) and send you an app password. Then:
+  ```
+  python agency.py new "Their Company" ... --email-user quotes.theircompany@gmail.com
+  ```
+  and add the line it prints (`EMAIL_PASSWORD_THEIR_COMPANY=...`) to `.env`. Replies are read from that same mailbox. The owner can change the password any time to cut off access.
 - **Stay under Gmail's limits:** about 500 emails a day. A 100-quote pilot sends roughly 30 a day at most.
 - **Hot leads:** set `--owner-email` when you create a campaign so the owner gets an email the moment someone is interested.
 - **Back up `clients/`** somewhere private. It holds customers' names and contact details. Never upload it to GitHub (it's already excluded).

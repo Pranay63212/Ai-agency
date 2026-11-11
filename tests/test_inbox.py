@@ -112,3 +112,23 @@ def test_imap_settings_follow_smtp(monkeypatch):
     monkeypatch.setenv("SMTP_USER", "me@gmail.com")
     monkeypatch.setenv("SMTP_PASSWORD", "app-pass")
     assert inbox._imap_settings() == ("imap.gmail.com", "me@gmail.com", "app-pass")
+
+
+def test_email_account_shared_and_per_client(camp, monkeypatch):
+    from estimate_recovery.sender import email_account, password_var
+    monkeypatch.setenv("SMTP_HOST", "smtp.gmail.com")
+    monkeypatch.setenv("SMTP_USER", "me@gmail.com")
+    monkeypatch.setenv("SMTP_PASSWORD", "shared")
+    monkeypatch.delenv("SMTP_FROM", raising=False)
+    shared = email_account(camp)
+    assert shared["user"] == "me@gmail.com" and shared["from"] == "Mike at Comfort Pro HVAC <me@gmail.com>"
+
+    camp.save_settings({**camp.settings(), "email_user": "quotes.co@gmail.com"})
+    assert password_var(camp) == "EMAIL_PASSWORD_T"
+    with pytest.raises(RuntimeError, match="EMAIL_PASSWORD_T"):
+        email_account(camp)
+    monkeypatch.setenv("EMAIL_PASSWORD_T", "client-pass")
+    own = email_account(camp)
+    assert (own["user"], own["password"], own["host"]) == ("quotes.co@gmail.com", "client-pass", "smtp.gmail.com")
+    assert own["from"] == "Mike at Comfort Pro HVAC <quotes.co@gmail.com>"
+    assert inbox._imap_settings(camp) == ("imap.gmail.com", "quotes.co@gmail.com", "client-pass")

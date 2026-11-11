@@ -1,6 +1,5 @@
 """Handle a customer's reply: log it, honor opt-outs, classify it, draft an answer, alert the owner."""
 
-import os
 import re
 
 from .campaign import Campaign
@@ -85,10 +84,10 @@ def alert_owner(campaign: Campaign, contact: dict | None, from_: str, body: str,
     text = (f"HOT LEAD: {name} ({from_}) about {job}.\n\nThey said: \"{body}\"\n\n"
             f"Summary: {result['summary']}\nSuggested reply: {result['draft_reply']}")
     how = "logged"
-    if s.get("owner_email") and os.environ.get("SMTP_HOST"):
-        from .sender import send_email
+    if s.get("owner_email"):
+        from .sender import email_account, send_email
         try:
-            send_email(s["owner_email"], f"Hot lead: {name} - {job}", text)
+            send_email(s["owner_email"], f"Hot lead: {name} - {job}", text, email_account(campaign))
             how = f"emailed {s['owner_email']}"
         except Exception as e:
             how = f"email failed: {e}"

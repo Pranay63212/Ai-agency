@@ -9,6 +9,7 @@ Email: SMTP_HOST, SMTP_PORT (default 587), SMTP_USER, SMTP_PASSWORD, SMTP_FROM
 import base64
 import json
 import os
+import re
 import smtplib
 import urllib.parse
 import urllib.request
@@ -115,26 +116,53 @@ def send_text(to: str, body: str) -> str:
         return json.load(resp).get("sid", "")
 
 
-def send_email(to: str, subject: str, body: str, reply_to: str = "") -> str:
-    host, user, pw = os.environ.get("SMTP_HOST"), os.environ.get("SMTP_USER"), os.environ.get("SMTP_PASSWORD")
-    from_ = os.environ.get("SMTP_FROM") or user
-    if not (host and from_):
-        raise RuntimeError("Set SMTP_HOST, SMTP_USER, SMTP_PASSWORD and SMTP_FROM to send email")
+def password_var(campaign: Campaign) -> str:
+    slug = os.path.basename(os.path.normpath(campaign.path))
+    return "EMAIL_PASSWORD_" + re.sub(r"\W", "_", slug).upper()
+
+
+def email_account(campaign: Campaign | None = None) -> dict:
+    """Which mailbox to send from (and read replies from).
+
+    A client with "email_user" set in its settings uses its own mailbox; its password comes
+    from .env as EMAIL_PASSWORD_<CLIENT_SLUG>. Otherwise the shared SMTP_* settings are used.
+    Either way the sender name defaults to "<Sender> at <Business>".
+    """
+    s = campaign.settings() if campaign else {}
+    if s.get("email_user"):
+        user = s["email_user"]
+        password = os.environ.get(password_var(campaign), "")
+        if not password:
+            raise RuntimeError(f"Add {password_var(campaign)}=<app password> to .env for {user}")
+        host = s.get("email_host") or "smtp.gmail.com"
+        port = 587
+    else:
+        user, password = os.environ.get("SMTP_USER", ""), os.environ.get("SMTP_PASSWORD", "")
+        host, port = os.environ.get("SMTP_HOST", ""), int(os.environ.get("SMTP_PORT", "587"))
+        if not (host and user):
+            raise RuntimeError("Set SMTP_HOST, SMTP_USER and SMTP_PASSWORD in .env to send email")
+    named = f"{s['sender']} at {s['business']} <{user}>" if s.get("sender") and s.get("business") else user
+    from_ = s.get("email_from") or (os.environ.get("SMTP_FROM") if not s.get("email_user") else "") or named
+    return {"host": host, "port": port, "user": user, "password": password, "from": from_}
+
+
+def send_email(to: str, subject: str, body: str, account: dict | None = None) -> str:
+    acct = account or email_account()
     msg = EmailMessage()
-    msg["From"], msg["To"], msg["Subject"] = from_, to, subject
-    if reply_to:
-        msg["Reply-To"] = reply_to
+    msg["From"], msg["To"], msg["Subject"] = acct["from"], to, subject
     msg.set_content(body)
-    with smtplib.SMTP(host, int(os.environ.get("SMTP_PORT", "587")), timeout=30) as s:
+    with smtplib.SMTP(acct["host"], acct["port"], timeout=30) as s:
         s.starttls()
-        if user and pw:
-            s.login(user, pw)
+        if acct["password"]:
+            s.login(acct["user"], acct["password"])
         s.send_message(msg)
     return msg.get("Message-ID", "") or "sent"
 
 
-def deliver(out: Outgoing) -> str:
-    return send_text(out.to, out.body) if out.channel == "text" else send_email(out.to, out.subject, out.body)
+def deliver(out: Outgoing, account: dict | None = None) -> str:
+    if out.channel == "text":
+        return send_text(out.to, out.body)
+    return send_email(out.to, out.subject, out.body, account)
 
 
 def send_due(campaign: Campaign, mode: str = "dry-run", now: datetime | None = None,
@@ -148,12 +176,14 @@ def send_due(campaign: Campaign, mode: str = "dry-run", now: datetime | None = N
             f"Outside sending hours ({settings['send_hours'][0]}:00-{settings['send_hours'][1]}:00 "
             f"{settings['timezone']}, Mon-Sat). Nothing sent.")
     results = []
-    for out in due_messages(campaign, today)[:limit]:
+    due = due_messages(campaign, today)[:limit]
+    account = email_account(campaign) if mode == "live" and any(o.channel == "email" for o in due) else None
+    for out in due:
         if mode == "dry-run":
             results.append((out, "preview"))
             continue
         try:
-            ref = deliver(out) if mode == "live" else "marked"
+            ref = deliver(out, account) if mode == "live" else "marked"
         except Exception as e:
             results.append((out, f"FAILED: {e}"))
             continue

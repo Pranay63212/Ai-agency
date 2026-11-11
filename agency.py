@@ -67,7 +67,8 @@ def cmd_new(a):
                 "phone": a.phone, "timezone": a.timezone, "price_per_booking": a.price,
                 "owner_email": a.owner_email, "booking_link": a.booking_link,
                 "start_date": a.start or date.today().isoformat(), "pilot": not a.paid,
-                "channels": ["email"] if a.email_only else ["text", "email"]}
+                "channels": ["email"] if a.email_only else ["text", "email"],
+                "email_user": a.email_user}
     c.save_settings(settings)
 
     rows = load_csv(a.input)
@@ -80,6 +81,9 @@ def cmd_new(a):
     c.save_contacts(contacts, CONTACT_FIELDS)
     with open(os.path.join(c.path, "plan.html"), "w", encoding="utf-8") as f:
         f.write(build_report(contacts, cleaned.removed, c.business(), a.close_rate, a.provider))
+    if a.email_user:
+        from estimate_recovery.sender import password_var
+        print(f"Email will go out from {a.email_user}. Add {password_var(c)}=<app password> to .env.")
     print(f"\nCampaign ready: {c.path}\n  Review messages: {c.contacts_path}\n"
           f"  Client-facing plan: {os.path.join(c.path, 'plan.html')}\n"
           f"  Next: python agency.py send {slug}")
@@ -271,6 +275,7 @@ def main():
     n.add_argument("--close-rate", type=float, default=0.08)
     n.add_argument("--limit", type=int, help="only use the first N contacts (pilot = 100)")
     n.add_argument("--email-only", action="store_true", help="client has no texting; send everything by email")
+    n.add_argument("--email-user", default="", help="send from this client's own mailbox (password in .env)")
     n.add_argument("--force", action="store_true")
     n.set_defaults(func=cmd_new)
 

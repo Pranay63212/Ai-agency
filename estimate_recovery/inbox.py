@@ -25,7 +25,12 @@ QUOTE_MARKERS = [
 ]
 
 
-def _imap_settings() -> tuple[str, str, str]:
+def _imap_settings(campaign: Campaign | None = None) -> tuple[str, str, str]:
+    """Same mailbox the campaign sends from; IMAP_* overrides the shared account."""
+    from .sender import email_account
+    if campaign is not None and campaign.settings().get("email_user"):
+        acct = email_account(campaign)
+        return acct["host"].replace("smtp.", "imap.", 1), acct["user"], acct["password"]
     smtp_host = os.environ.get("SMTP_HOST", "")
     host = os.environ.get("IMAP_HOST") or (smtp_host.replace("smtp.", "imap.", 1) if smtp_host else "")
     user = os.environ.get("IMAP_USER") or os.environ.get("SMTP_USER", "")
@@ -56,7 +61,7 @@ def reply_text(msg: email.message.EmailMessage) -> str:
 def check_replies(campaign: Campaign, provider: str | None = None, dry_run: bool = False) -> list[dict]:
     """Process unread replies from this campaign's customers. Other mail is left untouched."""
     emails = {c["email"].lower() for c in campaign.contacts() if c.get("email")}
-    host, user, password = _imap_settings()
+    host, user, password = _imap_settings(campaign)
     results = []
     with imaplib.IMAP4_SSL(host) as imap:
         imap.login(user, password)
