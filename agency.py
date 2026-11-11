@@ -12,6 +12,8 @@ Client work
   python agency.py status cool-air-hvac
   python agency.py set cool-air-hvac pilot=false price_per_booking=250
   python agency.py serve --port 8080               # receive replies from Twilio
+  python agency.py check-replies cool-air-hvac     # read email replies from your inbox
+  python agency.py daily cool-air-hvac --live      # check replies + send what's due (schedule this)
 
 Finding clients
   python agency.py outreach --leads leads.csv --name "Jade" --agency "Recover Ready"
@@ -26,6 +28,23 @@ import json
 import os
 import sys
 from datetime import date
+
+
+def load_env_file(path: str = ".env") -> None:
+    """Read KEY=value lines from .env so keys don't have to be set in the terminal each time."""
+    here = os.path.join(os.path.dirname(os.path.abspath(__file__)), path)
+    if not os.path.exists(here):
+        return
+    with open(here, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+load_env_file()  # before importing modules that read settings
 
 from estimate_recovery.campaign import DEFAULT_SETTINGS, Campaign, open_campaign, slugify
 from estimate_recovery.clean import clean, load_csv
@@ -47,7 +66,8 @@ def cmd_new(a):
     settings = {**DEFAULT_SETTINGS, "business": a.business, "trade": a.trade, "sender": a.sender,
                 "phone": a.phone, "timezone": a.timezone, "price_per_booking": a.price,
                 "owner_email": a.owner_email, "booking_link": a.booking_link,
-                "start_date": a.start or date.today().isoformat(), "pilot": not a.paid}
+                "start_date": a.start or date.today().isoformat(), "pilot": not a.paid,
+                "channels": ["email"] if a.email_only else ["text", "email"]}
     c.save_settings(settings)
 
     rows = load_csv(a.input)
@@ -157,6 +177,48 @@ def cmd_set(a):
     print(json.dumps(s, indent=2))
 
 
+def _print_replies(results):
+    for r in results:
+        flag = "HOT " if r.get("hot") else ""
+        print(f"  {flag}{r['from']}: {r.get('intent', '?')} - {r.get('summary') or r['body'][:80]}")
+
+
+def cmd_check_replies(a):
+    from estimate_recovery.inbox import check_replies
+    c = open_campaign(ROOT, a.slug)
+    try:
+        results = check_replies(c, a.provider if a.provider != "mock" else None, dry_run=a.dry_run)
+    except Exception as e:
+        sys.exit(f"Couldn't check the inbox: {e}")
+    print(f"{len(results)} new repl{'y' if len(results) == 1 else 'ies'}.")
+    _print_replies(results)
+
+
+def cmd_daily(a):
+    """One command to schedule: read replies first (so repliers aren't messaged), then send."""
+    from estimate_recovery.inbox import check_replies
+    from estimate_recovery.sender import send_due
+    c = open_campaign(ROOT, a.slug)
+    print(f"== {c.settings()['business']} ==")
+    try:
+        replies = check_replies(c, a.provider if a.provider != "mock" else None)
+        print(f"{len(replies)} new repl{'y' if len(replies) == 1 else 'ies'}.")
+        _print_replies(replies)
+    except Exception as e:
+        print(f"Skipped reply check: {e}")
+        if a.live:
+            sys.exit("Not sending until replies can be checked, so nobody who replied gets another message.")
+    mode = "live" if a.live else "dry-run"
+    try:
+        sent = send_due(c, mode=mode)
+    except RuntimeError as e:
+        sys.exit(str(e))
+    print(f"{len(sent)} message(s) {'sent' if a.live else 'due (preview only; add --live to send)'}.")
+    for out, ref in sent:
+        print(f"  [{out.step} via {out.channel}] {out.contact['customer_name']} -> {ref}")
+    cmd_status(a)
+
+
 def cmd_serve(a):
     from estimate_recovery.webhook import serve
     serve(ROOT, a.host, a.port, a.provider if a.provider != "mock" else None, a.auto_reply)
@@ -208,6 +270,7 @@ def main():
     n.add_argument("--paid", action="store_true", help="not a free pilot; bill bookings")
     n.add_argument("--close-rate", type=float, default=0.08)
     n.add_argument("--limit", type=int, help="only use the first N contacts (pilot = 100)")
+    n.add_argument("--email-only", action="store_true", help="client has no texting; send everything by email")
     n.add_argument("--force", action="store_true")
     n.set_defaults(func=cmd_new)
 
@@ -257,6 +320,16 @@ def main():
     sv.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8080")))
     sv.add_argument("--auto-reply", action="store_true", help="text the AI draft back automatically")
     sv.set_defaults(func=cmd_serve)
+
+    cr = sub.add_parser("check-replies", parents=[ai], help="read customer replies from your email inbox")
+    cr.add_argument("slug")
+    cr.add_argument("--dry-run", action="store_true", help="show replies without processing them")
+    cr.set_defaults(func=cmd_check_replies)
+
+    d = sub.add_parser("daily", parents=[ai], help="check replies, then send what's due: schedule this")
+    d.add_argument("slug")
+    d.add_argument("--live", action="store_true")
+    d.set_defaults(func=cmd_daily)
 
     o = sub.add_parser("outreach", parents=[ai], help="write pitches for contractor leads")
     o.add_argument("--leads", required=True)

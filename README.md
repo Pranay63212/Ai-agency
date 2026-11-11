@@ -10,7 +10,8 @@ AI follow-up that turns home service contractors' old, unsold estimates into boo
 | Outreach | `python agency.py outreach` | Personalized pitches, video scripts and follow-ups for contractor leads |
 | Campaign setup | `python agency.py new` | Cleans a client's estimate export and writes each customer's day 1, 4 and 10 messages |
 | Sending | `python agency.py send` | Sends what's due by text (Twilio) or email. Previews by default; respects sending hours and opt-outs. |
-| Replies | `python agency.py serve` / `reply` | Reads replies, honors STOP, drafts answers, alerts the owner about hot leads |
+| Replies | `check-replies`, `serve`, `reply` | Reads email replies from your inbox (or texts via webhook), honors STOP and unsubscribe, alerts the owner about hot leads |
+| Daily run | `python agency.py daily <client> --live` | Checks replies, then sends what's due. Schedule it once a day. |
 | Tracking | `book`, `close`, `status` | Bookings, closed contacts, who to call today |
 | Reporting | `python agency.py report` | Weekly results page and invoice |
 
@@ -38,6 +39,7 @@ AI provider: `--provider nvidia` (default, uses `NVIDIA_API_KEY`), `claude` (`AN
 
 ## Docs
 
+- [docs/free-setup.md](docs/free-setup.md): run everything free on your computer by email, scheduled daily
 - [docs/playbook.md](docs/playbook.md): finding clients, running pilots, daily routine
 - [docs/setup.md](docs/setup.md): Twilio, email, webhook hosting, scheduling
 - [docs/pilot-agreement.md](docs/pilot-agreement.md): pilot agreement template (get it reviewed by a lawyer)
@@ -54,7 +56,8 @@ AI provider: `--provider nvidia` (default, uses `NVIDIA_API_KEY`), `claude` (`AN
 | `estimate_recovery/campaign.py` | Client folders, contacts, event log |
 | `estimate_recovery/sender.py` | Sequence timing, Twilio and SMTP sending |
 | `estimate_recovery/replies.py` | Reply sorting, opt-outs, owner alerts |
-| `estimate_recovery/webhook.py` | Reply web server |
+| `estimate_recovery/webhook.py` | Reply web server (texts) |
+| `estimate_recovery/inbox.py` | Email reply reader (IMAP) |
 | `estimate_recovery/weekly.py`, `report.py` | Client reports and invoices |
 | `estimate_recovery/outreach.py` | Prospect outreach writer |
 | `sample_data/` | Fake estimates and leads |

@@ -41,6 +41,7 @@ DEFAULT_SETTINGS = {
     "send_hours": [9, 20],
     "send_days": [0, 1, 2, 3, 4, 5],  # Mon-Sat
     "min_gap_days": 2,  # never message the same customer on back-to-back days
+    "channels": ["text", "email"],  # ["email"] for an email-only campaign
 }
 
 

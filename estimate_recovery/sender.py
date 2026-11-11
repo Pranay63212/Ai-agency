@@ -48,8 +48,10 @@ def _content(contact: dict, step: str, channel: str) -> tuple[str, str] | None:
     return f"Following up on your {job} quote", f"{body}\n\n{EMAIL_UNSUB}"
 
 
-def _pick_channel(contact: dict, step: str, preferred: str) -> str | None:
-    has = {"text": bool(contact.get("phone")), "email": bool(contact.get("email"))}
+def _pick_channel(contact: dict, step: str, preferred: str,
+                  allowed: tuple[str, ...] = ("text", "email")) -> str | None:
+    has = {"text": bool(contact.get("phone")) and "text" in allowed,
+           "email": bool(contact.get("email")) and "email" in allowed}
     if step == "day_4":
         return "email" if has["email"] else None
     if has[preferred]:
@@ -87,7 +89,7 @@ def due_messages(campaign: Campaign, today: date) -> list[Outgoing]:
                 continue
             if today < start + timedelta(days=offset):
                 break
-            channel = _pick_channel(c, step, preferred)
+            channel = _pick_channel(c, step, preferred, tuple(settings.get("channels") or ("text", "email")))
             content = _content(c, step, channel) if channel else None
             if not content:
                 continue  # step doesn't apply to this contact (e.g. no email for day_4)
