@@ -1,6 +1,7 @@
 """Write personalized outreach for contractor leads (your prospects, not their customers)."""
 
 import csv
+import re
 
 from .llm import chat_json
 
@@ -12,7 +13,9 @@ estimates for home service contractors. The offer: the agency runs AI follow-up 
 contractor's old, unsold quotes. Free pilot on up to 100 old estimates over 14 days. After that, \
 they pay only for jobs that get booked. No upfront cost.
 
-Rules: plain, friendly, short, written owner to owner. Name the problem in the first line \
+Rules: plain, friendly, short, written owner to owner, with normal capitalization. Open each \
+message with "Hi <first name>," when the owner's name is known, otherwise just "Hi," or \
+"Hi <company> team,". Name the problem in the first line \
 (quotes that went silent). Use the lead details to make it specific, but never invent facts, \
 numbers or results. Where you'd need a detail you weren't given (like their phone number), \
 write a [placeholder] in brackets. No hype words ("revolutionary", "game-changer"), no fake urgency, no emojis.
@@ -49,7 +52,7 @@ def _describe(lead: dict, me: dict) -> str:
     return (
         f"Sender: {me['name']}, {me['agency']}\n"
         f"Lead company: {lead['company']} ({lead.get('trade') or 'HVAC'}) in {lead.get('city') or 'their area'}\n"
-        f"Owner first name: {(lead.get('owner_name') or 'there').split()[0]}\n"
+        f"Owner first name: {(lead.get('owner_name') or 'unknown').split()[0]}\n"
         f"Google reviews: {lead.get('review_count')} at {lead.get('rating')} stars\n"
         f"Website: {lead.get('website') or 'unknown'}\n"
         f"Notes: {lead.get('notes') or 'none'}"
@@ -57,7 +60,7 @@ def _describe(lead: dict, me: dict) -> str:
 
 
 def template(lead: dict, me: dict) -> dict:
-    first = (lead.get("owner_name") or "there").split()[0]
+    first = (lead.get("owner_name") or "").split()[0] if lead.get("owner_name") else "there"
     co = lead["company"]
     return {
         "subject": "old quotes at " + co.lower(),
@@ -85,6 +88,13 @@ def template(lead: dict, me: dict) -> dict:
     }
 
 
+def tidy(text: str) -> str:
+    """Fix models that write in all lowercase: capitalize sentence starts, 'I' and 'AI'."""
+    text = re.sub(r"\bi\b", "I", text)
+    text = re.sub(r"\bai\b", "AI", text)
+    return re.sub(r"(^|[.!?]\s+|\n\s*)([a-z])", lambda m: m.group(1) + m.group(2).upper(), text)
+
+
 def write_outreach(leads: list[dict], me: dict, provider: str) -> list[dict]:
     out = []
     for i, lead in enumerate(leads, 1):
@@ -94,7 +104,8 @@ def write_outreach(leads: list[dict], me: dict, provider: str) -> list[dict]:
         else:
             try:
                 data = chat_json(provider, SYSTEM_PROMPT, _describe(lead, me), FIELDS)
-                msgs = {k: str(data[k]).strip() for k in FIELDS}
+                msgs = {k: tidy(str(data[k]).strip()) if k != "subject" else str(data[k]).strip()
+                        for k in FIELDS}
             except Exception as e:
                 print(f"    ! AI failed ({e}); using template")
                 msgs = template(lead, me)
