@@ -8,6 +8,7 @@ AI follow-up that turns home service contractors' old, unsold estimates into boo
 |---|---|---|
 | Demo | `python run_demo.py` | Sample HVAC list in, personalized messages and a client-ready report out. Use it for your demo video. |
 | Outreach | `python agency.py outreach` | Personalized pitches, video scripts and follow-ups for contractor leads |
+| Auto prospecting | `python agency.py prospect ...` | Finds lead emails on their websites and emails leads automatically (day 0/3/7/14), within CAN-SPAM rules |
 | Campaign setup | `python agency.py new` | Cleans a client's estimate export and writes each customer's day 1, 4 and 10 messages |
 | Sending | `python agency.py send` | Sends what's due by text (Twilio) or email. Previews by default; respects sending hours and opt-outs. |
 | Replies | `check-replies`, `serve`, `reply` | Reads email replies from your inbox (or texts via webhook), honors STOP and unsubscribe, alerts the owner about hot leads |
@@ -39,6 +40,7 @@ AI provider: `--provider nvidia` (default, uses `NVIDIA_API_KEY`), `claude` (`AN
 
 ## Docs
 
+- [docs/auto-prospecting.md](docs/auto-prospecting.md): automatic lead emails
 - [docs/free-setup.md](docs/free-setup.md): run everything free on your computer by email, scheduled daily
 - [docs/playbook.md](docs/playbook.md): finding clients, running pilots, daily routine
 - [docs/setup.md](docs/setup.md): Twilio, email, webhook hosting, scheduling
@@ -60,6 +62,7 @@ AI provider: `--provider nvidia` (default, uses `NVIDIA_API_KEY`), `claude` (`AN
 | `estimate_recovery/inbox.py` | Email reply reader (IMAP) |
 | `estimate_recovery/weekly.py`, `report.py` | Client reports and invoices |
 | `estimate_recovery/outreach.py` | Prospect outreach writer |
+| `estimate_recovery/prospecting.py`, `find_emails.py` | Automatic lead emails, website email finder |
 | `sample_data/` | Fake estimates and leads |
 | `tests/` | `python -m pytest` |
 

@@ -58,8 +58,13 @@ def reply_text(msg: email.message.EmailMessage) -> str:
     return "\n".join(lines).strip()
 
 
-def check_replies(campaign: Campaign, provider: str | None = None, dry_run: bool = False) -> list[dict]:
-    """Process unread replies from this campaign's customers. Other mail is left untouched."""
+def check_replies(campaign: Campaign, provider: str | None = None, dry_run: bool = False,
+                  handler=None) -> list[dict]:
+    """Process unread replies from this campaign's contacts. Other mail is left untouched.
+
+    handler(campaign, sender, body) -> dict lets other workflows (prospecting) reuse this;
+    by default customer replies go through replies.handle_reply.
+    """
     emails = {c["email"].lower() for c in campaign.contacts() if c.get("email")}
     host, user, password = _imap_settings(campaign)
     results = []
@@ -79,7 +84,10 @@ def check_replies(campaign: Campaign, provider: str | None = None, dry_run: bool
             if dry_run:
                 results.append({"from": sender, "body": body})
                 continue
-            result = handle_reply(campaign, sender, body or "(empty reply)", provider)
+            if handler:
+                result = handler(campaign, sender, body or "(empty reply)")
+            else:
+                result = handle_reply(campaign, sender, body or "(empty reply)", provider)
             imap.store(num, "+FLAGS", "\\Seen")
             results.append({"from": sender, "body": body, **result})
     return results

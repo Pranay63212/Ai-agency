@@ -33,7 +33,8 @@ estimates, not to sell. Include what to say to whoever answers, and a 2-sentence
 the owner picks up. Use line breaks between parts.
 - video_script: a 60-second screen-recording script (what to say while showing their website \
 and a sample follow-up message written for their business)
-- day_3_followup: under 40 words, mentions a short video
+- day_3_followup: under 40 words, a friendly bump that offers to send a short demo video \
+(don't claim it's already recorded)
 - day_7_tip: under 60 words, one genuinely useful tip about following up quotes, no pitch \
 except one closing line
 - day_14_breakup: under 40 words, polite "should I close your file?" note
@@ -105,7 +106,7 @@ def template(lead: dict, me: dict) -> dict:
             f"replies and books interested customers on your calendar. I'll run it free on 100 "
             f"old estimates. Reply if you want to see it on your own list."
         ),
-        "day_3_followup": f"Hi {first}, I recorded a 60-second video showing what this would look like for {co}. Want me to send it?",
+        "day_3_followup": f"Hi {first}, just bumping this in case it got buried. Happy to send a 60-second demo showing how it would work for {co}. Want it?",
         "day_7_tip": (
             f"Hi {first}, one quick tip: quotes followed up within 48 hours and again at 7 days "
             f"close noticeably more often than quotes followed up once. Even a short text works. "
@@ -129,8 +130,9 @@ def write_outreach(leads: list[dict], me: dict, provider: str,
     for i, lead in enumerate(leads, 1):
         print(f"  [{i}/{len(leads)}] {lead['company']}")
         prev = (existing or {}).get(lead["company"])
-        if prev and prev.get("source") == "ai" and all(prev.get(k) for k in FIELDS):
-            out.append({**lead, **{k: prev[k] for k in FIELDS}, "source": "ai"})
+        if prev and prev.get("source") in ("ai", "edited") and all(prev.get(k) for k in FIELDS):
+            # Keep AI-written and hand-edited messages; only redo template fallbacks.
+            out.append({**lead, **{k: prev[k] for k in FIELDS}, "source": prev["source"]})
             continue
         source = "template"
         if provider == "mock":

@@ -5,3 +5,5 @@ output/
 # Real client data: customer names, phones, emails. Never commit.
 clients/
 .pytest_cache/
+# Prospect lists with reply history
+prospects/

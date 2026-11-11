@@ -52,6 +52,7 @@ from estimate_recovery.messages import write_all
 from estimate_recovery.report import build_report
 
 ROOT = os.environ.get("AGENCY_CLIENTS_DIR", "clients")
+PROSPECT_ROOT = os.environ.get("AGENCY_PROSPECTS_DIR", "prospects")
 CONTACT_FIELDS = [
     "contact_id", "customer_name", "phone", "email", "channels", "job_type", "quote_amount",
     "quote_date", "notes", "day_1_text", "day_4_email_subject", "day_4_email_body", "day_10_text",
@@ -223,6 +224,110 @@ def cmd_daily(a):
     cmd_status(a)
 
 
+# prospecting (automatic cold email to contractor leads) --------------------------------
+
+def cmd_prospect_new(a):
+    from estimate_recovery.prospecting import create
+    if not os.path.exists(a.outreach):
+        sys.exit(f"{a.outreach} not found. Make it first with: python agency.py outreach --leads ...")
+    c, total, with_email = create(PROSPECT_ROOT, a.name, a.outreach, {
+        "business": a.agency, "sender": a.sender, "phone": a.phone,
+        "mailing_address": a.address, "daily_limit": a.daily_limit, "email_user": a.email_user})
+    slug = os.path.basename(c.path)
+    print(f"Prospect list ready: {c.path}\n  {total} leads, {with_email} with an email address.")
+    if with_email < total:
+        print(f"  Find missing emails: python agency.py prospect find-emails {slug}")
+    if not a.address:
+        print(f"  Add your mailing address (required): python agency.py prospect set {slug} mailing_address=\"...\"")
+    print(f"  Preview: python agency.py prospect daily {slug}")
+
+
+def cmd_prospect_find(a):
+    from estimate_recovery.find_emails import find_email
+    c = open_campaign(PROSPECT_ROOT, a.slug)
+    leads = c.contacts()
+    todo = [lead for lead in leads if not lead.get("email")]
+    print(f"{len(todo)} lead(s) without an email.")
+    for lead in todo:
+        if not lead.get("website"):
+            print(f"  {lead['company']}: no website in the list. Add one, or type the email in.")
+            continue
+        email, note = find_email(lead["website"])
+        print(f"  {lead['company']}: {email or note}")
+        if email:  # leads without an email were never contacted, so no history to move
+            lead["email"], lead["contact_id"] = email, email
+    c.save_contacts(leads, list(leads[0].keys()))
+
+
+def cmd_prospect_send(a, live=None):
+    from estimate_recovery.prospecting import send
+    c = open_campaign(PROSPECT_ROOT, a.slug)
+    live = a.live if live is None else live
+    try:
+        results = send(c, live=live, limit=getattr(a, "limit", None))
+    except RuntimeError as e:
+        sys.exit(str(e))
+    if not results:
+        print("No emails due right now (or today's limit is reached).")
+    for lead, step, subject, body, ref in results:
+        print(f"[{step}] {lead['company']} <{lead['email']}> -> {ref}")
+        if not live and getattr(a, "show", False):
+            print(f"    Subject: {subject}\n    " + body.replace("\n", "\n    "))
+    if results and not live:
+        print(f"\n{len(results)} email(s) due. Nothing sent. Add --live to send (and --show to read them).")
+
+
+def cmd_prospect_check(a):
+    from estimate_recovery.inbox import check_replies
+    from estimate_recovery.prospecting import handle_prospect_reply
+    c = open_campaign(PROSPECT_ROOT, a.slug)
+    results = check_replies(c, handler=handle_prospect_reply)
+    print(f"{len(results)} new repl{'y' if len(results) == 1 else 'ies'}.")
+    for r in results:
+        print(f"  {'HOT ' if r.get('hot') else ''}{r['summary']}")
+        if r.get("hot"):
+            print(f"    They said: {r['body'][:300]}")
+    return results
+
+
+def cmd_prospect_status(a):
+    from estimate_recovery.prospecting import summary
+    c = open_campaign(PROSPECT_ROOT, a.slug)
+    for k, v in summary(c).items():
+        print(f"  {k.replace('_', ' '):<14} {v}")
+    replied = [e for e in c.events() if e["type"] == "alert"]
+    if replied:
+        print("\nReplies to answer:")
+        for e in replied:
+            print(f"  {e['time'][:10]} {e['detail'][:150]}")
+
+
+def cmd_prospect_daily(a):
+    c = open_campaign(PROSPECT_ROOT, a.slug)
+    print(f"== Prospects: {os.path.basename(c.path)} ==")
+    try:
+        cmd_prospect_check(a)
+    except Exception as e:
+        print(f"Skipped reply check: {e}")
+        if a.live:
+            sys.exit("Not sending until replies can be checked, so nobody who replied gets another email.")
+    cmd_prospect_send(a, live=a.live)
+    cmd_prospect_status(a)
+
+
+def cmd_prospect_set(a):
+    c = open_campaign(PROSPECT_ROOT, a.slug)
+    s = c.settings()
+    for pair in a.pairs:
+        k, _, v = pair.partition("=")
+        try:
+            s[k] = json.loads(v)
+        except json.JSONDecodeError:
+            s[k] = v
+    c.save_settings(s)
+    print("Saved.")
+
+
 def cmd_serve(a):
     from estimate_recovery.webhook import serve
     serve(ROOT, a.host, a.port, a.provider if a.provider != "mock" else None, a.auto_reply)
@@ -237,7 +342,7 @@ def cmd_outreach(a):
         with open(a.out, newline="", encoding="utf-8") as f:
             existing = {r["company"]: r for r in csv.DictReader(f)}
     rows = write_outreach(leads, {"name": a.name, "agency": a.agency}, a.provider, existing)
-    redo = sum(r["source"] != "ai" for r in rows)
+    redo = sum(r["source"] == "template" for r in rows)
     if redo and a.provider != "mock":
         print(f"{redo} lead(s) used the backup template. Run the same command again to retry just those.")
     os.makedirs(os.path.dirname(a.out) or ".", exist_ok=True)
@@ -335,6 +440,42 @@ def main():
     d.add_argument("slug")
     d.add_argument("--live", action="store_true")
     d.set_defaults(func=cmd_daily)
+
+    pr = sub.add_parser("prospect", help="automatic cold email to contractor leads")
+    psub = pr.add_subparsers(dest="pcmd", required=True)
+    pn = psub.add_parser("new", help="make a prospect list from an outreach CSV")
+    pn.add_argument("name")
+    pn.add_argument("--outreach", required=True, help="CSV from the outreach command")
+    pn.add_argument("--agency", required=True, help="your agency name")
+    pn.add_argument("--sender", required=True, help="your name")
+    pn.add_argument("--phone", default="")
+    pn.add_argument("--address", default="", help="your mailing address (legally required in cold email)")
+    pn.add_argument("--daily-limit", type=int, default=20)
+    pn.add_argument("--email-user", default="", help="send from a different mailbox than .env's")
+    pn.set_defaults(func=cmd_prospect_new)
+    pf = psub.add_parser("find-emails", help="look up missing emails on each lead's website")
+    pf.add_argument("slug")
+    pf.set_defaults(func=cmd_prospect_find)
+    ps = psub.add_parser("send", help="send (or preview) emails due today")
+    ps.add_argument("slug")
+    ps.add_argument("--live", action="store_true")
+    ps.add_argument("--show", action="store_true", help="print the full emails in preview")
+    ps.add_argument("--limit", type=int)
+    ps.set_defaults(func=cmd_prospect_send)
+    pc = psub.add_parser("check", help="read replies from your inbox")
+    pc.add_argument("slug")
+    pc.set_defaults(func=cmd_prospect_check)
+    pst = psub.add_parser("status")
+    pst.add_argument("slug")
+    pst.set_defaults(func=cmd_prospect_status)
+    pd = psub.add_parser("daily", help="check replies, then send what's due: schedule this")
+    pd.add_argument("slug")
+    pd.add_argument("--live", action="store_true")
+    pd.set_defaults(func=cmd_prospect_daily)
+    pse = psub.add_parser("set", help="change settings, e.g. daily_limit=25")
+    pse.add_argument("slug")
+    pse.add_argument("pairs", nargs="+")
+    pse.set_defaults(func=cmd_prospect_set)
 
     o = sub.add_parser("outreach", parents=[ai], help="write pitches for contractor leads")
     o.add_argument("--leads", required=True)

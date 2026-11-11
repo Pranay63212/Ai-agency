@@ -145,9 +145,15 @@ End with: "We run a free 14‑day pilot on up to 100 estimates. You only pay whe
 *HVAC / plumbing / electrical · 142 reviews · 847-496-0434*
 
 ### Email / website contact form
-**Subject:** old quotes going silent
+**Subject:** Old quotes across all your trades
 
-Hi, I noticed Cahill Heating has a lot of estimates that never get a response. We run a free 14‑day AI follow‑up on up to 100 old quotes, and you only pay for jobs that actually book. Interested in a quick pilot?
+Hi Cahill team,
+
+With heating, cooling, electric and plumbing under one roof, you probably send a lot of quotes, and some always go quiet.
+
+I follow up on those old estimates and book the customers who are still interested. Free on up to 100 old quotes for 14 days. After that, you only pay for jobs that book.
+
+Interested?
 
 ### Facebook message
 Hi Cahill team, lots of your estimates go quiet. We can run a free 14‑day AI follow‑up on up to 100 old quotes — pay only for booked jobs. Want to try?
@@ -177,13 +183,15 @@ Open the Cahill Heating homepage, scroll to the “Request a Quote” section, a
 *HVAC · 142 reviews · 847-800-3555*
 
 ### Email / website contact form
-**Subject:** old hvac quotes going silent
+**Subject:** Quotes from last season
 
 Hi E-Trade team,
 
-142 reviews but how many estimates from last season never got a yes or no? We run AI follow-up on old quotes for HVAC companies in the north suburbs. Free 14-day pilot on up to 100 estimates — you only pay for jobs that book.
+142 reviews says you do good work, but I'd bet some quotes from last season never got a yes or no.
 
-Worth a quick look?
+I follow up on old, unsold estimates and book the customers still interested. Free pilot on up to 100 quotes for 14 days, and after that you only pay for booked jobs.
+
+Worth a look?
 
 ### Facebook message
 Hi, saw E-Trade has 142 reviews in the north suburbs. Do you have a pile of unsold estimates from last year sitting in your system?
@@ -215,10 +223,15 @@ Hi, I was on [website] and noticed E-Trade has 142 Google reviews — solid repu
 *HVAC · 105 reviews · 847-253-0866*
 
 ### Email / website contact form
-**Subject:** follow up on unsold hvac quotes
+**Subject:** Old HVAC quotes that went quiet
 
-Hi Ibbotson Heating Co team,
-Your old estimates that went silent are costing you jobs. We run AI follow‑up on those quotes for free for 14 days on up to 100 estimates. Would you be open to a free 14‑day pilot on up to 100 old quotes?
+Hi Ibbotson team,
+
+Quick question: how many estimates did you send last year that never got a yes or no?
+
+I run follow-up on old, unsold quotes for HVAC companies. It re-contacts those customers and books the ones still interested. I'll do it free on up to 100 of your old estimates for 14 days, and after that you only pay for jobs that actually book.
+
+Worth a quick look?
 
 ### Facebook message
 Hi Ibbotson Heating Co team, Noticed you’ve got 105 reviews but many old quotes go quiet. We can follow up automatically for free for two weeks. Interested?
@@ -382,11 +395,13 @@ Hi Top Midwest Construction team, I'm [Your name]. I'm on the Top Midwest Constr
 *Roofing and exteriors · 64 reviews · 847-975-1554*
 
 ### Email / website contact form
-**Subject:** old roofing quotes going silent?
+**Subject:** Old roofing quotes
 
 Hi Maira,
 
-Your old roofing estimates sit untouched while homeowners forget. We run AI follow-up on those silent quotes — free pilot on up to 100 estimates for 14 days. You only pay for jobs that actually book.
+Roofing quotes often go quiet while homeowners think it over, and then they never call back.
+
+I follow up on those old estimates for you and book the homeowners who are still interested. Free on up to 100 old quotes for 14 days, and after that you only pay for jobs that book.
 
 Worth a quick test?
 
@@ -638,13 +653,15 @@ Hi, I was on Design & Precision's site — great reviews, clean portfolio. I not
 *HVAC · 61 reviews · 847-359-4500*
 
 ### Email / website contact form
-**Subject:** old quotes going silent
+**Subject:** Old quotes that went quiet
 
-Hi Allied Air Conditioning & Heating team,
+Hi Allied team,
 
-You've got estimates that went quiet after the quote. We run AI follow-up on those old unsold jobs — free pilot on up to 100 estimates over 14 days. You only pay for jobs that actually book after that.
+Most HVAC shops send a quote, follow up once, and move on, so a lot of good jobs just go quiet.
 
-Worth a quick look?
+I follow up on those old quotes for you and book the customers who are still interested. Free on up to 100 old estimates for 14 days. After that, you only pay for jobs that book.
+
+Open to trying it?
 
 ### Facebook message
 Hi, saw you're in the north suburbs. Lots of HVAC quotes go silent after the estimate. We follow up on those old ones free for 14 days — pay only for booked jobs. Interested?
