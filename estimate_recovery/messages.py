@@ -17,6 +17,10 @@ the business offers one. Never invent facts about the customer or the business: 
 financing, warranties, prices, rebates or availability that aren't in the details below. If the \
 customer raised a concern (like price), offer to talk it through instead.
 
+The notes are the business's internal notes. Use what the customer said or wanted to personalize \
+the message, but never mention record-keeping details (a wrong phone number, duplicates, CRM \
+status, "per our notes").
+
 Write three messages:
 1. day_1_text: an SMS under 300 characters that ends with "Reply STOP to opt out."
 2. day_4_email: an email with a subject line and a body under 120 words.
