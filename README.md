@@ -7,6 +7,7 @@ AI follow-up that turns home service contractors' old, unsold estimates into boo
 | Tool | Command | What it does |
 |---|---|---|
 | Demo | `python run_demo.py` | Sample HVAC list in, personalized messages and a client-ready report out. Use it for your demo video. |
+| Samples | `python agency.py samples --trade roofing` | 20 fake quotes + a short, specific follow-up for each, to show owners. Ready-made in `samples/` |
 | Outreach | `python agency.py outreach` | Personalized pitches, video scripts and follow-ups for contractor leads |
 | Auto prospecting | `python agency.py prospect ...` | Finds lead emails on their websites and emails leads automatically (day 0/3/7/14), within CAN-SPAM rules |
 | Campaign setup | `python agency.py new` | Cleans a client's estimate export and writes each customer's day 1, 4 and 10 messages |
@@ -40,6 +41,8 @@ AI provider: `--provider nvidia` (default, uses `NVIDIA_API_KEY`), `claude` (`AN
 
 ## Docs
 
+- [docs/tonight.md](docs/tonight.md): copy-paste outreach messages, Facebook post, objection answers
+- [docs/pilot-agreement-short.md](docs/pilot-agreement-short.md): one-page free pilot agreement
 - [docs/auto-prospecting.md](docs/auto-prospecting.md): automatic lead emails
 - [docs/free-setup.md](docs/free-setup.md): run everything free on your computer by email, scheduled daily
 - [docs/playbook.md](docs/playbook.md): finding clients, running pilots, daily routine

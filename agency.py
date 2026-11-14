@@ -328,6 +328,15 @@ def cmd_prospect_set(a):
     print("Saved.")
 
 
+def cmd_samples(a):
+    from estimate_recovery.samples import build
+    biz = {"name": a.business, "sender": a.sender}
+    qpath, mpath, best = build(a.trade, a.out, biz, a.provider, a.count)
+    print(f"Saved: {qpath}\n       {mpath}\n\nTop 3 to show an owner:")
+    for m in best:
+        print(f"\n  {m['customer_name']}, {m['job_type']} (${m['quote_amount']:,.0f}):\n  \"{m['message']}\"")
+
+
 def cmd_serve(a):
     from estimate_recovery.webhook import serve
     serve(ROOT, a.host, a.port, a.provider if a.provider != "mock" else None, a.auto_reply)
@@ -476,6 +485,14 @@ def main():
     pse.add_argument("slug")
     pse.add_argument("pairs", nargs="+")
     pse.set_defaults(func=cmd_prospect_set)
+
+    sm = sub.add_parser("samples", parents=[ai], help="fake quotes + follow-up texts to show owners")
+    sm.add_argument("--trade", required=True, help="hvac, roofing, remodeling or plumbing")
+    sm.add_argument("--business", default="Your Company")
+    sm.add_argument("--sender", default="Mike")
+    sm.add_argument("--count", type=int, default=20)
+    sm.add_argument("--out", default="samples")
+    sm.set_defaults(func=cmd_samples, provider="mock")
 
     o = sub.add_parser("outreach", parents=[ai], help="write pitches for contractor leads")
     o.add_argument("--leads", required=True)
