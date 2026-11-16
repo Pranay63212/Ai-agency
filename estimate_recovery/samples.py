@@ -58,6 +58,27 @@ JOBS = {
         ("Main water line replacement", 3500, 8000, "Still dealing with low water pressure? Glad to go over the main line quote again."),
         ("Drain tile / overhead sewer", 9000, 18000, "Following up on the drain tile quote to keep the basement dry. Want to talk it through?"),
     ],
+    "fencing": [
+        ("Cedar privacy fence (150 ft)", 6500, 11000, "Still thinking about the cedar privacy fence for the backyard? Happy to go over the quote or the layout."),
+        ("Vinyl privacy fence (200 ft)", 9000, 15000, "Following up on the vinyl fence quote. Want to get it on the schedule for spring?"),
+        ("Aluminum pool fence", 5500, 9500, "Checking in on the aluminum pool fence quote. Any questions about the code requirements?"),
+        ("Chain link fence (dog run)", 2200, 4200, "Still want that dog run fenced in? Glad to answer questions on the chain link quote."),
+        ("Wood fence repair + new gate", 900, 2400, "Following up on the fence repair and new gate. Is that section still leaning?"),
+        ("Horizontal slat fence (front yard)", 7000, 13000, "Still picturing the horizontal slat fence out front? Happy to revisit styles or the quote."),
+        ("Composite fence (100 ft)", 8000, 14000, "Checking in on the composite fence quote. Want to talk colors or timing?"),
+        ("Double drive gate", 2500, 6000, "Following up on the double drive gate quote. Any questions I can answer?"),
+    ],
+    # Window cleaning is repeat work: these are past customers due for another clean.
+    "window_cleaning": [
+        ("Spring exterior window cleaning", 250, 450, "It's been about a year since we cleaned your windows. Want to get on the spring schedule?"),
+        ("Interior + exterior windows", 400, 750, "Time for your yearly inside-and-out window clean? Happy to pencil you in."),
+        ("Windows + screens", 300, 550, "Checking in. Want your windows and screens done again this season?"),
+        ("Gutter cleaning + windows", 350, 650, "Fall is coming up. Want us back for the gutters and windows like last year?"),
+        ("Storefront window cleaning (monthly)", 120, 300, "Following up on the monthly storefront cleaning quote. Want to start this month?"),
+        ("Post-construction window cleaning", 600, 1500, "Checking in on the post-construction window quote. Is the project close to done?"),
+        ("Hard water stain removal", 300, 800, "Following up on the hard water stain removal quote. Still seeing those spots?"),
+        ("Skylight + high windows", 250, 600, "Want us back for the skylights and high windows this season?"),
+    ],
 }
 
 OPENERS = ["Hi {first}, it's {sender} from {biz}.", "Hi {first}, {sender} with {biz} here."]
@@ -98,7 +119,7 @@ def ai_message(q: dict, biz: dict, provider: str) -> str:
 
 
 def build(trade: str, out_dir: str, biz: dict, provider: str = "mock", n: int = 20) -> tuple[str, str, list[dict]]:
-    trade = trade.lower()
+    trade = trade.lower().replace(" ", "_").replace("-", "_")
     if trade not in JOBS:
         raise SystemExit(f"Trade must be one of: {', '.join(JOBS)}")
     quotes = make_quotes(trade, n)
