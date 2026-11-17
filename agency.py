@@ -55,7 +55,7 @@ ROOT = os.environ.get("AGENCY_CLIENTS_DIR", "clients")
 PROSPECT_ROOT = os.environ.get("AGENCY_PROSPECTS_DIR", "prospects")
 CONTACT_FIELDS = [
     "contact_id", "customer_name", "phone", "email", "channels", "job_type", "quote_amount",
-    "quote_date", "notes", "day_1_text", "day_4_email_subject", "day_4_email_body", "day_10_text",
+    "quote_date", "lead_type", "notes", "day_1_text", "day_4_email_subject", "day_4_email_body", "day_10_text",
 ]
 
 

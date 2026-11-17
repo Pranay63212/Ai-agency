@@ -45,11 +45,11 @@ table {{ border-collapse:collapse; width:100%; min-width:640px; }} th,td {{ text
 th {{ font-size:12px; text-transform:uppercase; color:var(--muted); }} .num {{ text-align:right; white-space:nowrap; }} .msg {{ font-size:13px; color:var(--muted); }}
 h2 {{ font-size:16px; margin:0 0 8px; }} ul {{ margin:0; padding-left:20px; color:var(--muted); }}
 </style></head><body><main>
-<h1>{html.escape(business['name'])}: Unsold Estimate Recovery</h1>
+<h1>{html.escape(business['name'])}: Dead Lead Revival</h1>
 <p class="sub">Prepared {date.today():%B %d, %Y} · {mode}</p>
 <div class="stats">
   <div class="stat"><b>{len(contacts)}</b><span>customers ready for follow-up</span></div>
-  <div class="stat"><b>{_money(pipeline)}</b><span>in unsold quotes</span></div>
+  <div class="stat"><b>{_money(pipeline)}</b><span>in leads that went quiet</span></div>
   <div class="stat"><b>~{expected_jobs}</b><span>jobs if {close_rate:.0%} rebook</span></div>
   <div class="stat"><b>{_money(expected)}</b><span>estimated recovered revenue</span></div>
 </div>

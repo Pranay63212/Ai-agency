@@ -1,13 +1,20 @@
 # New Focus: Fencing and Window Cleaning
 
-## What you sell each one
+## The offer: dead lead revival
 
-| Trade | Their problem | Your offer |
-|---|---|---|
-| **Fencing** | Homeowners get 2–3 quotes and go quiet. Big tickets ($3k–$15k). | "I follow up on your old fence quotes and send you the ones still interested. Free on 100 quotes; after that you only pay per booked job." |
-| **Window cleaning** | Customers need cleaning every spring or fall, but nobody reminds them. | "I message your past customers when they're due and fill your schedule. Free on your first 100 past customers; after that you pay per booked job." |
+"Send me your dead leads. I follow up with every one in your company's name and send you the ones ready to book. Free on your first 100; after that you only pay per booked job."
 
-The same tool runs both: `python agency.py new ...` with their list. For window cleaning, the list is **past customers**, not unsold quotes.
+**Dead leads** come in three kinds, so ask owners for all three:
+
+| Kind | What it is | Fencing | Window cleaning |
+|---|---|---|---|
+| **Inquiries** | Called, filled out a form or answered an ad, never got a quote or booked | Very common: missed calls, slow callbacks | Common in spring rush |
+| **Quotes** | Got a price, went quiet | The big one: $3k–$15k jobs | Commercial and one-off jobs |
+| **Past customers** | Used them before, haven't come back | Stain and seal, repairs, gates | The big one: yearly and seasonal cleans |
+
+The same tool handles all three. Add a `lead_type` column (`inquiry`, `quote` or `past_customer`) to the list, or leave it out: rows with a quote amount count as quotes, and the rest count as inquiries. Example: `sample_data/fencing_dead_leads.csv`.
+
+**Ask every owner:** "Where do your missed calls, old form fills, old quotes and past customers live? A spreadsheet, your CRM, your phone? I can work with any of it."
 
 ## Finding warm leads (owners who already want more work)
 
@@ -29,7 +36,7 @@ Put each one in `leads/warm-leads-template.csv` with **where you found them** an
 ## Messages
 
 ### Fencing: direct message
-> Hi [Name], quick question: of the fence quotes you send, how many never get a yes or no? Most homeowners get 2–3 quotes and go quiet. I follow up on those for you and send back anyone still interested. Free on 100 old quotes, and after that you only pay for jobs that book. Worth trying?
+> Hi [Name], quick question: how many fence leads went quiet this year: missed calls, web forms nobody got back to, quotes that never got a yes? I follow up on those dead leads in your company's name and send you the ones ready to book. Free on your first 100, and after that you only pay for jobs that book. Worth trying?
 
 ### Window cleaning: direct message
 > Hi [Name], how many past customers do you have who haven't booked again this year? I message them when they're due for a clean ("time for your spring windows?") and send you the bookings. Free on your first 100 past customers, and after that you only pay per booked job. Want to try it before spring?

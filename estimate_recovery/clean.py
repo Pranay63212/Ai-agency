@@ -1,10 +1,17 @@
-"""Clean an exported list of unsold estimates before any follow-up is sent."""
+"""Clean an exported list of dead leads (quotes, inquiries, past customers) before follow-up."""
 
 import csv
 import re
 from dataclasses import dataclass, field
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+LEAD_TYPES = {  # what kind of dead lead each row is
+    "quote": "quote", "estimate": "quote", "quoted": "quote", "unsold": "quote",
+    "inquiry": "inquiry", "lead": "inquiry", "request": "inquiry", "form": "inquiry", "call": "inquiry",
+    "past_customer": "past_customer", "customer": "past_customer", "past": "past_customer",
+    "repeat": "past_customer", "reactivation": "past_customer",
+}
+
 SKIP_STATUSES = {"booked", "won", "sold", "opted_out", "do_not_contact", "lost_permanently"}
 
 
@@ -30,6 +37,14 @@ def normalize_email(raw: str) -> str | None:
 def load_csv(path: str) -> list[dict]:
     with open(path, newline="", encoding="utf-8-sig") as f:
         return [{k.strip(): (v or "").strip() for k, v in row.items()} for row in csv.DictReader(f)]
+
+
+def lead_type(row: dict, amount: float) -> str:
+    """quote (got a price, went quiet), inquiry (asked, never quoted) or past_customer."""
+    raw = (row.get("lead_type") or row.get("type") or "").strip().lower().replace(" ", "_")
+    if raw in LEAD_TYPES:
+        return LEAD_TYPES[raw]
+    return "quote" if amount > 0 else "inquiry"
 
 
 def clean(rows: list[dict]) -> CleanResult:
@@ -65,6 +80,8 @@ def clean(rows: list[dict]) -> CleanResult:
             "phone": phone or "",
             "email": email or "",
             "quote_amount": amount,
+            "quote_date": row.get("quote_date") or row.get("date") or row.get("last_service_date") or "",
+            "lead_type": lead_type(row, amount),
             "channels": ", ".join(c for c, ok in (("text", phone), ("email", email)) if ok),
         })
 

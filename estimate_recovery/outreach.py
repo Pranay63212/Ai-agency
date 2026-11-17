@@ -10,15 +10,17 @@ FIELDS = ["subject", "first_touch", "facebook_message", "linkedin_note", "call_s
           "video_script", "day_3_followup", "day_7_tip", "day_14_breakup"]
 MIN_REVIEWS = 20  # fewer reviews usually means too few quotes to be worth a pilot
 
-SYSTEM_PROMPT = """You write cold outreach for a one-person agency that recovers unsold \
-estimates for home service contractors. The offer: the agency runs AI follow-up on the \
-contractor's old, unsold quotes. Free pilot on up to 100 old estimates over 14 days. After that, \
-they pay only for jobs that get booked. No upfront cost.
+SYSTEM_PROMPT = """You write cold outreach for a one-person agency that revives dead leads for \
+home service businesses (fencing, window cleaning, HVAC, roofing and similar). Dead leads are \
+people who asked for a quote and went quiet, inquiries that never booked, and past customers who \
+haven't come back. The offer: the agency follows up with those people in the business's name and \
+sends back anyone ready to book. Free pilot on up to 100 dead leads over 14 days. After that, they \
+pay only for jobs that get booked. No upfront cost.
 
 Rules: plain, friendly, short, written owner to owner, with normal capitalization. Open each \
 message with "Hi <first name>," when the owner's name is known, otherwise just "Hi," or \
 "Hi <company> team,". Name the problem in the first line \
-(quotes that went silent). Use the lead details to make it specific, but never invent facts, \
+(leads and quotes that went silent, or past customers who never came back). Use the lead details to make it specific, but never invent facts, \
 numbers or results. Where you'd need a detail you weren't given (like their phone number), \
 write a [placeholder] in brackets. No hype words ("revolutionary", "game-changer"), no fake urgency, no emojis.
 

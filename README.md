@@ -1,6 +1,6 @@
-# AI Agency: Unsold Estimate Recovery
+# AI Agency: Dead Lead Revival
 
-AI follow-up that turns home service contractors' old, unsold estimates into booked jobs.
+AI follow-up that turns home service businesses' dead leads (old inquiries, quotes that went quiet, and past customers) into booked jobs. Current focus: fencing and window cleaning.
 
 ## What's here
 

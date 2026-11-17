@@ -209,3 +209,18 @@ def test_twilio_signature():
                                     hashlib.sha1).digest()).decode()
     assert twilio_signature_ok(url, params, sig, token)
     assert not twilio_signature_ok(url, params, "forged", token)
+
+
+def test_lead_types_and_messages():
+    rows = [row("Q", phone="2145550111", amount="5000"),
+            {**row("I", phone="2145550112", amount=""), "lead_type": "inquiry"},
+            {**row("P", phone="2145550113", amount="300"), "lead_type": "past customer"},
+            row("Auto", phone="2145550114", amount="")]
+    contacts = clean(rows).contacts
+    assert [c["lead_type"] for c in contacts] == ["quote", "inquiry", "past_customer", "inquiry"]
+    msgs = write_all(contacts, BUSINESS, "mock")
+    assert "quote" in msgs[0]["day_1_text"]
+    assert "reached out" in msgs[1]["day_1_text"]
+    assert "Thanks again" in msgs[2]["day_1_text"]
+    from estimate_recovery.messages import _describe
+    assert "Quote amount" not in _describe(contacts[1], {**BUSINESS})

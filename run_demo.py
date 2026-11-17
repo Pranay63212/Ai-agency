@@ -16,7 +16,7 @@ from estimate_recovery.report import build_report
 
 OUTPUT_FIELDS = [
     "contact_id", "customer_name", "phone", "email", "channels", "job_type", "quote_amount",
-    "quote_date", "notes",
+    "quote_date", "lead_type", "notes",
     "day_1_text", "day_4_email_subject", "day_4_email_body", "day_10_text",
 ]
 

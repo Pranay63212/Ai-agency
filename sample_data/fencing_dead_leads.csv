@@ -1,0 +1,9 @@
+customer_name,phone,email,job_type,quote_amount,date,lead_type,status,notes
+Megan Fischer,(630) 555-0141,megan.f@example.com,Cedar privacy fence (150 ft),8900,2026-05-12,quote,open,Wanted it before the dog arrived; comparing 2 other bids
+Tom Alvarez,(630) 555-0177,,Vinyl privacy fence,,2026-06-03,inquiry,open,Filled out website form; nobody called back
+Janet Cole,,janet.cole@example.com,Aluminum pool fence,6200,2026-04-20,quote,open,Asked if it meets pool code
+Ravi Patel,(847) 555-0112,ravi.p@example.com,Fence repair after storm,,2026-08-14,inquiry,open,Called during storm week; voicemail
+Lisa Monroe,(847) 555-0190,lisa.m@example.com,Fence stain and seal,1400,2025-09-10,past_customer,open,Stained last fall; likes the cedar look
+Greg Hanson,(708) 555-0133,ghanson@example.com,Chain link dog run,3100,2026-07-01,quote,booked,Booked in July
+Dana Ruiz,(708) 555-0164,dana.ruiz@example.com,Horizontal slat fence (front yard),11800,2026-03-28,quote,open,Wanted to wait for spring
+Paul Becker,(630) 555-0101,,Double drive gate,,2026-09-22,inquiry,open,Facebook ad lead
