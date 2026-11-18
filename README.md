@@ -42,6 +42,7 @@ AI provider: `--provider nvidia` (default, uses `NVIDIA_API_KEY`), `claude` (`AN
 ## Docs
 
 - [docs/fencing-window-cleaning.md](docs/fencing-window-cleaning.md): current focus: offers, warm lead sources, messages
+- [docs/call-script.md](docs/call-script.md): getting past gatekeepers, owner call script, answers to common pushback
 - [docs/tonight.md](docs/tonight.md): copy-paste outreach messages, Facebook post, objection answers
 - [docs/pilot-agreement-short.md](docs/pilot-agreement-short.md): one-page free pilot agreement
 - [docs/auto-prospecting.md](docs/auto-prospecting.md): automatic lead emails
