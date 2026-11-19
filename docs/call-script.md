@@ -38,7 +38,38 @@ If still no: "Thanks for your time, have a good one." Move on.
 **Make the gatekeeper your ally.** They often *are* the person who handles leads.
 > "Are you the one who handles the calls and quotes? … How do you keep up with all the ones that go quiet?"
 
-## Talking to the owner
+## Version 2 opener: no "do you have a minute", not a typical cold call
+
+Don't ask for their time. Open with a question that's easy to answer and gives them an easy out. People relax when you hand them the "no".
+
+**Fencing**
+> "Hey [Name], [Your name] here. I'm looking for a fence company that's got a pile of old quotes nobody ever followed up on. Is that you, or are you guys on top of that?"
+
+**Window cleaning**
+> "Hey [Name], [Your name] here. I'm looking for a window cleaning company with a bunch of past customers who never booked again this year. Is that you, or do you have that covered?"
+
+Then **stop talking**. Whatever they say, you have a next line:
+
+| They say | You say |
+|---|---|
+| "Ha, yeah, probably us." | "Most are. Roughly how many would you guess? A dozen, a hundred?" |
+| "We're on top of it." | "Respect, that's rare. Do you go back to the ones from 3–6 months ago too, or just the recent ones?" |
+| "Who is this? What are you selling?" | "Fair question. I bring back leads that went quiet. Not new leads, your old ones. I'll show you on 10 of them for free before you decide anything." |
+
+**The small ask: 10 leads, not 100**
+> "Here's what I'd do. Send me 10 old quotes, just names, numbers and what the job was. I'll reach out to them this week as your company and tell you exactly how many answer. Takes you two minutes. If it works, we talk. If not, you've lost nothing."
+
+10 is an easy yes. Once they see replies, scale up to 100 and then the paid plan.
+
+**Why it's different from every other cold call:**
+- You're not selling ads or "more leads". You're bringing back customers they already paid to get.
+- You hand them the "no" up front, so they don't feel pushed.
+- The first step is tiny, free and over in a week.
+
+**Voicemail (version 2)**
+> "Hey [Name], [Your name]. Quick one: I'm looking for a [fence / window cleaning] company with old [quotes / customers] nobody's followed up on. If that's you, I'll bring back 10 of them for free this week. [Number]."
+
+## Talking to the owner (original version)
 
 ### 1. Permission opener (10 seconds)
 > "Hi [Name], this is [Your name]. I know I'm catching you out of the blue. Can I take 30 seconds to tell you why I called, and then you can tell me if it's worth talking?"
