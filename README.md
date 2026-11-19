@@ -41,6 +41,7 @@ AI provider: `--provider nvidia` (default, uses `NVIDIA_API_KEY`), `claude` (`AN
 
 ## Docs
 
+- **[docs/how-it-works.md](docs/how-it-works.md): start here. What the service is, what to say when someone asks "tell me more", and the day-by-day plan after a yes**
 - [docs/fencing-window-cleaning.md](docs/fencing-window-cleaning.md): current focus: offers, warm lead sources, messages
 - [docs/call-script.md](docs/call-script.md): getting past gatekeepers, owner call script, answers to common pushback
 - [docs/tonight.md](docs/tonight.md): copy-paste outreach messages, Facebook post, objection answers
