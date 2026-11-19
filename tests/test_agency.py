@@ -243,3 +243,16 @@ def test_text_sheet_has_prefilled_sms_links(camp):
     page = open(path).read()
     assert count == 2 and "sms:+12145550101?&amp;body=Hi%20Ann" in page
     assert sms_link("+1", "a b&c") == "sms:+1?&body=a%20b%26c"
+
+
+def test_text_sheet_emailed_to_owner_and_not_repeated(camp, monkeypatch):
+    from estimate_recovery.text_sheet import email_text_sheet
+    camp.save_settings({**camp.settings(), "manual_texts": True, "owner_email": "boss@example.com"})
+    mails = []
+    monkeypatch.setattr("estimate_recovery.sender.email_account", lambda c: {})
+    monkeypatch.setattr("estimate_recovery.sender.send_email",
+                        lambda to, subj, body, acct=None, html=None: mails.append((to, subj, html)))
+    n, how = email_text_sheet(camp, date(2026, 11, 2))
+    assert n == 2 and how == "emailed to boss@example.com"
+    assert mails[0][0] == "boss@example.com" and "sms:+12145550101" in mails[0][2]
+    assert email_text_sheet(camp, date(2026, 11, 2))[0] == 0   # already handed off today

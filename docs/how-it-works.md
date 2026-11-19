@@ -38,7 +38,7 @@ python agency.py text-sheet their-co                  # makes clients/their-co/t
 python agency.py send their-co --mark --only text     # after they're sent, log them
 ```
 
-Send the page to whoever holds the business phone (email or AirDrop). Each "Text Megan" button opens Messages with the number and message filled in, and they press send. 10–20 texts take about 5 minutes. Never blast texts automatically from a personal phone: it reads as spam, replies go to the wrong person, and carriers flag it.
+**Automatic:** if the campaign has `--owner-email`, the morning `daily --live` run emails the page to the owner by itself and logs those texts, so they don't repeat tomorrow. Otherwise, send the page to whoever holds the business phone yourself (email or AirDrop). Each "Text Megan" button opens Messages with the number and message filled in, and they press send. 10–20 texts take about 5 minutes. Never blast texts automatically from a personal phone: it reads as spam, replies go to the wrong person, and carriers flag it.
 
 ## What customers actually receive (example, fencing)
 

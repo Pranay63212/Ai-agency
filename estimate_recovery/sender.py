@@ -146,11 +146,14 @@ def email_account(campaign: Campaign | None = None) -> dict:
     return {"host": host, "port": port, "user": user, "password": password, "from": from_}
 
 
-def send_email(to: str, subject: str, body: str, account: dict | None = None) -> str:
+def send_email(to: str, subject: str, body: str, account: dict | None = None,
+               html: str | None = None) -> str:
     acct = account or email_account()
     msg = EmailMessage()
     msg["From"], msg["To"], msg["Subject"] = acct["from"], to, subject
     msg.set_content(body)
+    if html:
+        msg.add_alternative(html, subtype="html")
     with smtplib.SMTP(acct["host"], acct["port"], timeout=30) as s:
         s.starttls()
         if acct["password"]:

@@ -232,6 +232,17 @@ def cmd_daily(a):
     print(f"{len(sent)} message(s) {'sent' if a.live else 'due (preview only; add --live to send)'}.")
     for out, ref in sent:
         print(f"  [{out.step} via {out.channel}] {out.contact['customer_name']} -> {ref}")
+    if c.settings().get("manual_texts"):
+        from estimate_recovery.text_sheet import build_text_sheet, email_text_sheet
+        if a.live:
+            try:
+                n, how = email_text_sheet(c)
+                print(f"Texts for the business phone: {n} ({how}).")
+            except Exception as e:
+                print(f"Couldn't email the text sheet: {e}. Run: python agency.py text-sheet {a.slug}")
+        else:
+            path, n = build_text_sheet(c)
+            print(f"{n} text(s) for the business phone (preview: {path}).")
     cmd_status(a)
 
 

@@ -17,6 +17,37 @@ def sms_link(phone: str, body: str) -> str:
 
 
 def build_text_sheet(c: Campaign, today: date | None = None) -> tuple[str, int]:
+    """Write today's sheet to the campaign folder. Returns (path, number of texts)."""
+    page, texts, today = sheet(c, today)
+    path = os.path.join(c.path, f"texts-{today.isoformat()}.html")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(page)
+    return path, len(texts)
+
+
+def email_text_sheet(c: Campaign, today: date | None = None) -> tuple[int, str]:
+    """Email today's sheet to the owner and log those texts as handed off.
+
+    Logging them stops tomorrow's sheet from repeating them. If the owner skips some, they can
+    still send them from today's email. Returns (number of texts, what happened).
+    """
+    from .sender import email_account, send_email
+    s = c.settings()
+    page, texts, today = sheet(c, today)
+    if not texts:
+        return 0, "no texts due"
+    if not s.get("owner_email"):
+        return len(texts), "no owner_email set: run text-sheet and send the page yourself"
+    plain = "\n\n".join(f"{o.contact['customer_name']} ({o.to}):\n{o.body}" for o in texts)
+    send_email(s["owner_email"], f"Today's {len(texts)} follow-up texts for {s['business']}",
+               "Open this on the business phone and tap each button to text.\n\n" + plain,
+               email_account(c), html=page)
+    for o in texts:
+        c.log(o.contact["contact_id"], "sent", o.step, "text via sheet emailed to owner")
+    return len(texts), f"emailed to {s['owner_email']}"
+
+
+def sheet(c: Campaign, today: date | None = None):
     s = c.settings()
     today = today or datetime.now(ZoneInfo(s["timezone"])).date()
     texts = [o for o in due_messages(c, today) if o.channel == "text"]
@@ -44,7 +75,4 @@ h1 {{ font-size:22px; margin:0 0 4px; }} .sub {{ color:var(--muted); margin:0 0 
 <p class="sub">{len(texts)} to send. Tap a button, check the message, press send in Messages, then come back for the next one.</p>
 {cards or '<p class="sub">Nothing due today.</p>'}
 </main></body></html>"""
-    path = os.path.join(c.path, f"texts-{today.isoformat()}.html")
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(page)
-    return path, len(texts)
+    return page, texts, today
