@@ -166,8 +166,12 @@ def deliver(out: Outgoing, account: dict | None = None) -> str:
 
 
 def send_due(campaign: Campaign, mode: str = "dry-run", now: datetime | None = None,
-             limit: int = 200) -> list[tuple[Outgoing, str]]:
-    """mode: "dry-run" (show only), "mark" (log as sent, you sent them elsewhere), "live" (send)."""
+             limit: int = 200, only: str | None = None) -> list[tuple[Outgoing, str]]:
+    """mode: "dry-run" (show only), "mark" (log as sent, you sent them elsewhere), "live" (send).
+
+    only: "text" or "email" to handle one channel. With manual_texts on, live mode sends only
+    email; texts wait for the text sheet (and `send --mark --only text` once they're sent).
+    """
     settings = campaign.settings()
     now = now or datetime.now(ZoneInfo(settings["timezone"]))
     today = now.astimezone(ZoneInfo(settings["timezone"])).date()
@@ -176,7 +180,12 @@ def send_due(campaign: Campaign, mode: str = "dry-run", now: datetime | None = N
             f"Outside sending hours ({settings['send_hours'][0]}:00-{settings['send_hours'][1]}:00 "
             f"{settings['timezone']}, Mon-Sat). Nothing sent.")
     results = []
-    due = due_messages(campaign, today)[:limit]
+    due = due_messages(campaign, today)
+    if only:
+        due = [o for o in due if o.channel == only]
+    if mode == "live" and settings.get("manual_texts"):
+        due = [o for o in due if o.channel != "text"]
+    due = due[:limit]
     account = email_account(campaign) if mode == "live" and any(o.channel == "email" for o in due) else None
     for out in due:
         if mode == "dry-run":

@@ -29,6 +29,17 @@
 
 The whole pilot costs the owner about **30 minutes** plus the callbacks they'd want anyway.
 
+## Texting without a texting account
+
+Texts should come from the **business's own number**, which customers recognize, not your phone. Set the campaign up with `--manual-texts`: emails still go out automatically, and texts go on a daily tap-to-send page:
+
+```
+python agency.py text-sheet their-co                  # makes clients/their-co/texts-<date>.html
+python agency.py send their-co --mark --only text     # after they're sent, log them
+```
+
+Send the page to whoever holds the business phone (email or AirDrop). Each "Text Megan" button opens Messages with the number and message filled in, and they press send. 10–20 texts take about 5 minutes. Never blast texts automatically from a personal phone: it reads as spam, replies go to the wrong person, and carriers flag it.
+
 ## What customers actually receive (example, fencing)
 
 1. **Day 1:** "Hi Megan, Dave from Oak Ridge Fence here. Checking in on the 150-ft cedar privacy fence quote from May. Any questions, or ready to schedule?"

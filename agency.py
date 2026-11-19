@@ -69,7 +69,7 @@ def cmd_new(a):
                 "owner_email": a.owner_email, "booking_link": a.booking_link,
                 "start_date": a.start or date.today().isoformat(), "pilot": not a.paid,
                 "channels": ["email"] if a.email_only else ["text", "email"],
-                "email_user": a.email_user}
+                "email_user": a.email_user, "manual_texts": a.manual_texts}
     c.save_settings(settings)
 
     rows = load_csv(a.input)
@@ -95,7 +95,7 @@ def cmd_send(a):
     c = open_campaign(ROOT, a.slug)
     mode = "live" if a.live else "mark" if a.mark else "dry-run"
     try:
-        results = send_due(c, mode=mode, limit=a.limit)
+        results = send_due(c, mode=mode, limit=a.limit, only=a.only)
     except RuntimeError as e:
         sys.exit(str(e))
     if not results:
@@ -108,6 +108,17 @@ def cmd_send(a):
             print("    " + out.body.replace("\n", "\n    "))
     if mode == "dry-run" and results:
         print(f"\n{len(results)} message(s) due. Nothing was sent. Use --live to send or --mark to log.")
+
+
+def cmd_text_sheet(a):
+    from estimate_recovery.text_sheet import build_text_sheet
+    c = open_campaign(ROOT, a.slug)
+    path, count = build_text_sheet(c)
+    if not count:
+        print("No texts due today.")
+        return
+    print(f"{count} text(s) due. Open this on the business phone and tap each one:\n  {path}\n"
+          f"When they're sent, log them:\n  python agency.py send {a.slug} --mark --only text")
 
 
 def cmd_reply(a):
@@ -389,6 +400,8 @@ def main():
     n.add_argument("--close-rate", type=float, default=0.08)
     n.add_argument("--limit", type=int, help="only use the first N contacts (pilot = 100)")
     n.add_argument("--email-only", action="store_true", help="client has no texting; send everything by email")
+    n.add_argument("--manual-texts", action="store_true",
+                   help="texts go out by hand from the business phone (text-sheet); emails stay automatic")
     n.add_argument("--email-user", default="", help="send from this client's own mailbox (password in .env)")
     n.add_argument("--force", action="store_true")
     n.set_defaults(func=cmd_new)
@@ -399,7 +412,12 @@ def main():
     g.add_argument("--live", action="store_true")
     g.add_argument("--mark", action="store_true")
     s.add_argument("--limit", type=int, default=200)
+    s.add_argument("--only", choices=["text", "email"], help="handle just one channel")
     s.set_defaults(func=cmd_send)
+
+    ts = sub.add_parser("text-sheet", help="page of today's texts with tap-to-send buttons (business phone)")
+    ts.add_argument("slug")
+    ts.set_defaults(func=cmd_text_sheet)
 
     r = sub.add_parser("reply", parents=[ai], help="process a reply by hand (email, phone call notes)")
     r.add_argument("slug")

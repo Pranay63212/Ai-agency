@@ -224,3 +224,22 @@ def test_lead_types_and_messages():
     assert "Thanks again" in msgs[2]["day_1_text"]
     from estimate_recovery.messages import _describe
     assert "Quote amount" not in _describe(contacts[1], {**BUSINESS})
+
+
+def test_manual_texts_live_sends_only_email(camp, monkeypatch):
+    camp.save_settings({**camp.settings(), "manual_texts": True})
+    sent = []
+    monkeypatch.setattr("estimate_recovery.sender.email_account", lambda c: {})
+    monkeypatch.setattr("estimate_recovery.sender.deliver", lambda out, acct=None: sent.append(out.channel) or "ok")
+    send_due(camp, "live", now=datetime(2026, 11, 3, 16, tzinfo=timezone.utc))
+    assert sent == ["email"]                      # Cal (email only); Ann and Bob wait for the text sheet
+    marked = send_due(camp, "mark", now=datetime(2026, 11, 3, 16, tzinfo=timezone.utc), only="text")
+    assert sorted(o.contact["customer_name"] for o, _ in marked) == ["Ann Lee", "Bob Ray"]
+
+
+def test_text_sheet_has_prefilled_sms_links(camp):
+    from estimate_recovery.text_sheet import build_text_sheet, sms_link
+    path, count = build_text_sheet(camp, date(2026, 11, 2))
+    page = open(path).read()
+    assert count == 2 and "sms:+12145550101?&amp;body=Hi%20Ann" in page
+    assert sms_link("+1", "a b&c") == "sms:+1?&body=a%20b%26c"

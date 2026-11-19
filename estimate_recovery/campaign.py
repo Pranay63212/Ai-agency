@@ -42,6 +42,7 @@ DEFAULT_SETTINGS = {
     "send_days": [0, 1, 2, 3, 4, 5],  # Mon-Sat
     "min_gap_days": 2,  # never message the same customer on back-to-back days
     "channels": ["text", "email"],  # ["email"] for an email-only campaign
+    "manual_texts": False,  # True: texts are sent by hand from the business phone (text-sheet)
     # Optional: send this client's email from its own account. The password goes in .env as
     # EMAIL_PASSWORD_<CLIENT_SLUG> (e.g. EMAIL_PASSWORD_COOL_AIR_HVAC), never in this file.
     "email_user": "",
